@@ -34,13 +34,13 @@ public:
 
 private:
 
-  zmq::context_t *context;
+  zmq::context_t context;
 
-  zmq::socket_t *socket;
+  zmq::socket_t socket;
 
 };
  
 } // namespace wibmod
 } // namespace dunedaq
 
-#endif // DFMODULES_INCLUDE_DFMODULES_STORAGEKEY_HPP_
+#endif // WIBMOD_INCLUDE_WIBMOD_WIBCOMMON_HPP_

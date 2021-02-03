@@ -14,11 +14,14 @@
 #ifndef WIBMOD_PLUGINS_WIBCONFIGURATOR_HPP_
 #define WIBMOD_PLUGINS_WIBCONFIGURATOR_HPP_
 
+#include "wibmod/WIBCommon.hpp"
+#include "wib.pb.h"
+
 #include <appfwk/DAQModule.hpp>
 #include <appfwk/ThreadHelper.hpp>
 
-#include "wibmod/WIBCommon.hpp"
-#include "wib.pb.h"
+#include <string>
+#include <memory>
 
 namespace dunedaq {
 namespace wibmod {
@@ -44,7 +47,7 @@ public:
   void init(const data_t&) override;
 
 private:
-  WIBCommon *wib = NULL;
+  std::unique_ptr<WIBCommon> wib;
 
   // Commands
   void do_conf(const data_t&);

@@ -15,6 +15,8 @@
 #include <TRACE/trace.h>
 #include <ers/ers.h>
 
+#include <string>
+
 /**
  * @brief Name used by TRACE TLOG calls from this source file
  */
@@ -86,12 +88,7 @@ WIBConfigurator::do_conf(const data_t& payload)
 
   const wibconfigurator::WIBConf &conf = payload.get<wibconfigurator::WIBConf>();
 
-  if (wib != NULL)
-  {
-    delete wib;
-  }
-  
-  wib = new WIBCommon(conf.wib_addr);
+  wib = std::unique_ptr<WIBCommon>(new WIBCommon(conf.wib_addr));
 
   ERS_LOG("Building WIB config for " << conf.wib_addr);
   wibproto::ConfigureWIB req;
