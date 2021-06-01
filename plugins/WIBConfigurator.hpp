@@ -15,6 +15,7 @@
 #define WIBMOD_PLUGINS_WIBCONFIGURATOR_HPP_
 
 #include "wibmod/WIBCommon.hpp"
+#include "wibmod/wibconfigurator/Nljs.hpp"
 #include "wib.pb.h"
 
 #include <appfwk/DAQModule.hpp>
@@ -55,7 +56,7 @@ private:
   void do_stop(const data_t&);
   
   // Helpers
-  void populate_femb_conf(wibproto::ConfigureWIB::ConfigureFEMB *femb_conf, const wibconfigurator::FEMBConf &conf);
+  void populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const wibconfigurator::FEMBConf &conf);
   const wibconfigurator::FEMBConf& femb_conf_i(const wibconfigurator::WIBConf &conf, size_t i);
 
 };

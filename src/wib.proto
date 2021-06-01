@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package dunedaq.wibmod.wibproto;
+package wib;
 
 import "google/protobuf/any.proto";
 
@@ -38,6 +38,10 @@ message ReadDaqSpy {
     bool deframe = 3; //return deframed data if true, frames if false
     bool channels = 4; //if deframe is true, returns channels if true, uvx if false
     
+    uint32 trigger_command = 5; // 0 for immediate software trigger, or nonzero for a TLU command code trigger
+    uint32 trigger_rec_ticks = 6; // Time to record after TLU trigger in 4.15834 ns ticks (18 bit max)
+    uint32 trigger_timeout_ms = 7; // Maximum time to wait for a TLU trigger in ms (32 bit max)
+    
     //replies DaqSpy if deframe is false
     message DaqSpy {
         bytes buf0 = 1; //contents of spy buffer 0 (1MB)
@@ -58,6 +62,20 @@ message ReadDaqSpy {
     }
 }
  
+// Configure FEMB power setting used in subsequent PowerWIB messages
+message ConfigurePower {
+    
+    //Voltage settings for the FEMB power rails
+    double dc2dc_o1 = 1;
+    double dc2dc_o2 = 2;
+    double dc2dc_o3 = 3;
+    double dc2dc_o4 = 4;
+    double ldo_a0= 5;
+    double ldo_a1 = 6;
+    
+    //replies Status
+}
+ 
 // Turn power ON and OFF for the FEMBs
 message PowerWIB {
 
@@ -68,6 +86,11 @@ message PowerWIB {
     bool femb3 = 4;
     
     bool cold = 5; // True if front end is COLD (77k)
+    
+    // 0 = full power-on sequence with COLDADC reset in software
+    // 1 = leave VDDD,VDDA off and no COLDADC reset (sync+reset driven externally)
+    // 2 = program externally reset COLDADCs and turn VDDD,VDDA on 
+    uint32 stage = 6; 
     
     //replies Status
 } 
@@ -80,9 +103,9 @@ message ConfigureWIB {
         
         // LArASIC global
         bool test_cap = 2; // test capacitor enabled
-        uint32 gain = 3; // 14, 25, 7.8, 4.7 mV/fC (0 - 3)
-        uint32 peak_time = 4; // 1.0, 0.5, 3, 2 us (0 - 3)
-        uint32 baseline = 5; // 0 (900 mV), 1 (200 mV)
+        uint32 gain = 3; // 14, 25, 7.8, 4.7 mV/fC (0 - 3) NOTE: this mapping depends on LArASIC revision!
+        uint32 peak_time = 4; // 1.0, 0.5, 3, 2 us (0 - 3) NOTE: this mapping depends on LArASIC revision!
+        uint32 baseline = 5; // 0 (900 mV), 1 (200 mV) NOTE: this mapping depends on LArASIC revision!
         uint32 pulse_dac = 6; // 6bit dac value
         
         // LArASIC channel
@@ -96,11 +119,37 @@ message ConfigureWIB {
         uint32 strobe_delay = 12; // offset from 2MHz to start strobe in 64MHz periods
         uint32 strobe_length = 13; // length of strobe in 64MHz periods
     }
+    
+    // To specify non-hardcoded values for COLDADC registers
+    message ConfigureCOLDADC {
+        uint32 reg_0 = 1;
+        uint32 reg_4 = 2;
+        uint32 reg_24 = 3;
+        uint32 reg_25 = 4;
+        uint32 reg_26 = 5;
+        uint32 reg_27 = 6;
+        uint32 reg_29 = 7;
+        uint32 reg_30 = 8;
+    }
 
     repeated ConfigureFEMB fembs = 1; //must supply 4
+    
     bool cold = 2; // True if front end is COLD (77k)
+    
     bool pulser = 3; // True if pulser (and LArASIC sdacsw2) should be enabled
+    
     bool adc_test_pattern = 4; // enable ADC test pattern
+    
+    ConfigureCOLDADC adc_conf = 5; // specify non-hardcoded values for COLDADC (omit for defaults)
+    
+    bool frame_dd = 6; // enable Frame-DD from COLDATA instead of Frame-14 data
+    
+    //replies Status
+}
+
+
+// Run the ADC calibration routine
+message Calibrate {
     
     //replies Status
 }
@@ -240,6 +289,35 @@ message GetTimestamp {
     }
 }
 
+// reads the git version information built into the software
+message GetSWVersion {
+    
+    message Version {
+        string version = 1;
+    }
+}
+
+// resets the timing endpoint
+message ResetTiming {
+    
+    //replies GetTimingStatus.TimingStatus
+}
+
+// reads the status of the timing endpoint
+message GetTimingStatus {
+
+    //replies TimingStatus
+    message TimingStatus {
+        //SI5344 status register values
+        uint32 lol_val = 1;
+        uint32 lol_flg_val = 2;
+        uint32 los_val = 3;
+        uint32 los_flg_val = 4;
+        //Firmware timing endpoint status register
+        uint32 ept_status = 5;
+    }
+}
+
 // sets the fake time generator start value
 message SetFakeTime {
     uint64 time = 1;
@@ -252,8 +330,6 @@ message StartFakeTime {
     
     //replies Empty
 }
-
-
 
 // reads the wib_server (or boot) log, optionally clearing the log
 message LogControl {

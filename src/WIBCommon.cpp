@@ -9,9 +9,7 @@
  */
 
 #include "wibmod/WIBCommon.hpp"
-#include "wib.pb.h"
-
-#include <ers/ers.h>
+#include "logging/Logging.hpp"
 
 #include <string>
 
@@ -23,33 +21,12 @@ WIBCommon::WIBCommon(const std::string &wib_addr) :
     socket(context, ZMQ_REQ)
 {
   socket.connect(wib_addr); // tcp://192.168.121.*:1234
-  ERS_LOG(wib_addr << " Connected!");
+  TLOG_DEBUG(0) << wib_addr << " Connected!";
 }
 
 WIBCommon::~WIBCommon()
 {
   socket.close();
-}
-
-template <class R, class C>
-void 
-WIBCommon::send_command(const C &msg, R &repl)
-{
-  wibproto::Command command;
-  command.mutable_cmd()->PackFrom(msg);
-  
-  std::string cmd_str;
-  command.SerializeToString(&cmd_str);
-  
-  zmq::message_t request(cmd_str.size());
-  memcpy(static_cast<void*>(request.data()), cmd_str.c_str(), cmd_str.size());
-  socket.send(request);
-  
-  zmq::message_t reply;
-  socket.recv(&reply);
-  
-  std::string reply_str(static_cast<char*>(reply.data()), reply.size());
-  repl.ParseFromString(reply_str);
 }
 
 } // namespace wibmod

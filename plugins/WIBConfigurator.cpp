@@ -8,12 +8,9 @@
  * received with this code.
  */
 
-#include "wibmod/wibconfigurator/Nljs.hpp"
+#include "logging/Logging.hpp"
 
 #include "WIBConfigurator.hpp"
-
-#include <TRACE/trace.h>
-#include <ers/ers.h>
 
 #include <string>
 
@@ -38,9 +35,6 @@ WIBConfigurator::WIBConfigurator(const std::string& name)
 void
 WIBConfigurator::init(const data_t&)
 {
-  TLOG(TLVL_ENTER_EXIT_METHODS) << get_name() << ": Entering init() method";
-  
-  TLOG(TLVL_ENTER_EXIT_METHODS) << get_name() << ": Exiting init() method";
 }
 
 const wibconfigurator::FEMBConf & 
@@ -61,7 +55,7 @@ WIBConfigurator::femb_conf_i(const wibconfigurator::WIBConf &conf, size_t i)
 }
 
 void
-WIBConfigurator::populate_femb_conf(wibproto::ConfigureWIB::ConfigureFEMB *femb_conf, const wibconfigurator::FEMBConf &conf)
+WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const wibconfigurator::FEMBConf &conf)
 {
   femb_conf->set_enabled(conf.enabled);
 
@@ -84,55 +78,48 @@ WIBConfigurator::populate_femb_conf(wibproto::ConfigureWIB::ConfigureFEMB *femb_
 void
 WIBConfigurator::do_conf(const data_t& payload)
 {
-  TLOG(TLVL_ENTER_EXIT_METHODS) << get_name() << ": Entering do_conf() method";
-
   const wibconfigurator::WIBConf &conf = payload.get<wibconfigurator::WIBConf>();
 
   wib = std::unique_ptr<WIBCommon>(new WIBCommon(conf.wib_addr));
 
-  ERS_LOG("Building WIB config for " << conf.wib_addr);
-  wibproto::ConfigureWIB req;
+  TLOG_DEBUG(0) << "Building WIB config for " << conf.wib_addr;
+  wib::ConfigureWIB req;
   req.set_cold(conf.cold);
   req.set_pulser(conf.pulser);
   req.set_adc_test_pattern(conf.adc_test_pattern);
 
   for(size_t iFEMB = 0; iFEMB < 4; iFEMB++)
   {
-    ERS_LOG("Building FEMB " << iFEMB << " config for " << conf.wib_addr);
-    wibproto::ConfigureWIB::ConfigureFEMB *femb_conf = req.add_fembs();
+    TLOG_DEBUG(0) << "Building FEMB " << iFEMB << " config for " << conf.wib_addr;
+    wib::ConfigureWIB::ConfigureFEMB *femb_conf = req.add_fembs();
     populate_femb_conf(femb_conf,femb_conf_i(conf,iFEMB));
   }
 
-  ERS_LOG("Sending WIB configuration to " << conf.wib_addr);
-  wibproto::Status rep;
+  TLOG_DEBUG(0) << "Sending WIB configuration to " << conf.wib_addr;
+  wib::Status rep;
   wib->send_command(req,rep);
   
   if (rep.success())
   {
-    ERS_LOG(conf.wib_addr << " successfully configured");
+    TLOG_DEBUG(0) << conf.wib_addr << " successfully configured";
   }
   else
   {
-    ERS_LOG(conf.wib_addr << " failed to configure");
+    TLOG_DEBUG(0) << conf.wib_addr << " failed to configure";
+    //FIXME raise fatal error
   }
-
-  TLOG(TLVL_ENTER_EXIT_METHODS) << get_name() << ": Exiting do_conf() method";
 }
 
 void
 WIBConfigurator::do_start(const data_t&)
 {
-  TLOG(TLVL_ENTER_EXIT_METHODS) << get_name() << ": Entering do_start() method";
-  ERS_LOG(get_name() << " successfully started");
-  TLOG(TLVL_ENTER_EXIT_METHODS) << get_name() << ": Exiting do_start() method";
+  TLOG_DEBUG(0) << get_name() << " successfully started";
 }
 
 void
 WIBConfigurator::do_stop(const data_t&)
 {
-  TLOG(TLVL_ENTER_EXIT_METHODS) << get_name() << ": Entering do_stop() method";
-  ERS_LOG(get_name() << " successfully stopped");
-  TLOG(TLVL_ENTER_EXIT_METHODS) << get_name() << ": Exiting do_stop() method";
+  TLOG_DEBUG(0) << get_name() << " successfully stopped";
 }
 
 
