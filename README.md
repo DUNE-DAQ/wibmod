@@ -20,7 +20,8 @@ This will store the metadata in the folder `wibapp`. To include more WIBs,
 include additional `-w [NAME] [ENDPOINT]` arguments. Where the `[NAME]` should
 uniquely identify a WIB (internally, modules are generated with names prefixed
 by `wib` e.g. `wibBLAND`) and the `[ENDPOINT]` is the ZMQ socket the WIB's 
-[`wib_server`](https://github.com/DUNE-DAQ/dune-wib-firmware/sw) is listening on. 
+[`wib_server`](https://github.com/DUNE-DAQ/dune-wib-firmware/tree/master/sw) is 
+listening on. 
 
 ### Running with nanorc
 
@@ -55,8 +56,8 @@ command in `WIBConfigurator` to send `WIBPower` messages to the `wib_server`, if
 this is how DAQ envisions this happening.
 
 For ICEBERG and artDAQ, power control was a set of 
-[external utilities](https://github.com/DUNE-DAQ/dune-wib-firmware/sw) which 
-communicate directly with the `wib_server`.
+[external utilities](https://github.com/DUNE-DAQ/dune-wib-firmware/tree/master/sw)
+which communicate directly with the `wib_server`.
 
 ### Run configuration
 
