@@ -14,7 +14,7 @@ applications (modules) can receive.
 
 To build metadata for a single WIB named `BLAND` with IP `192.168.1.4`:
 ```
-python -m wibmod.wibapp.toplevel wibapp -w LOCAL tcp://localhost:1234
+python -m wibmod.wibapp.toplevel wibapp -w LOCAL tcp://192.168.1.4:1234
 ```
 This will store the metadata in the folder `wibapp`. To include more WIBs,
 include additional `-w [NAME] [ENDPOINT]` arguments. Where the `[NAME]` should
