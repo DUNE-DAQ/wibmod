@@ -14,7 +14,7 @@ applications (modules) can receive.
 
 To build metadata for a single WIB named `BLAND` with IP `192.168.1.4`:
 ```
-python -m wibmod.wibapp.toplevel wibapp -w LOCAL tcp://192.168.1.4:1234
+python -m wibmod.wibapp.toplevel wibapp -w BLAND tcp://192.168.1.4:1234
 ```
 This will store the metadata in the folder `wibapp`. To include more WIBs,
 include additional `-w [NAME] [ENDPOINT]` arguments. Where the `[NAME]` should
@@ -62,7 +62,8 @@ which communicate directly with the `wib_server`.
 ### Run configuration
 
 Presumably the DAQ will want to change WIB/FEMB settings. `WIBConfigurator` 
-implements the `conf` command, which exposes [all settings](schema/wibmod/wibconfigurator.json). 
+implements the `conf` command, which exposes 
+[all settings](schema/wibmod/wibconfigurator.jsonnet). 
 Will `conf` be called after a `stop`? If that's possible `WIBConfigurator` is 
 good to go, otherwise additional commands will be needed.
 
@@ -86,8 +87,9 @@ but is currently ignored.
 ### Integration into larger DAQ system
 
 The stand-alone WIB app is a good starting place and testing squite. Eventually
-the run control or [minidaqapp](minidaqapp) may want to include `WIBConfigurator` 
-modules to add WIB control to some larger system. 
+the run control or [minidaqapp](https://github.com/DUNE-DAQ/minidaqapp) may 
+want to include `WIBConfigurator` modules to add WIB control to some larger 
+system. 
 
 ## Stateful vs stateless
 
