@@ -62,14 +62,6 @@ private:
 };
 
 } // namespace wibmod
-
-
-ERS_DECLARE_ISSUE_BASE(wibmod,
-                       UnreachableError,
-                       appfwk::GeneralDAQModuleIssue,
-                       "An unreachable part of the code has been reached.",
-                       ((std::string)name),
-                       ERS_EMPTY)
                        
 } // namespace dunedaq
 

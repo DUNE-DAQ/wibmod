@@ -9,6 +9,7 @@
  */
 
 #include "wibmod/WIBCommon.hpp"
+
 #include "logging/Logging.hpp"
 
 #include <string>

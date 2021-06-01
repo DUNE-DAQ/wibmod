@@ -8,9 +8,11 @@
  * received with this code.
  */
 
-#include "logging/Logging.hpp"
-
 #include "WIBConfigurator.hpp"
+
+#include "wibmod/Issues.hpp"
+
+#include "logging/Logging.hpp"
 
 #include <string>
 
@@ -106,7 +108,7 @@ WIBConfigurator::do_conf(const data_t& payload)
   else
   {
     TLOG_DEBUG(0) << conf.wib_addr << " failed to configure";
-    //FIXME raise fatal error
+    throw ConfigurationFailed(ERS_HERE, get_name());
   }
 }
 
