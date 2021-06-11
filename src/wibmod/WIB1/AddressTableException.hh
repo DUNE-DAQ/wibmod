@@ -1,7 +1,7 @@
 #ifndef __ADDRESSTABLEEXCEPTION_HH__
 #define __ADDRESSTABLEEXCEPTION_HH__ 1
 
-#include <BUException/ExceptionBase.hh>
+#include "wibmod/WIB1/BUException/ExceptionBase.hh"
 
 namespace BUException{       
   //Exceptions for WIB

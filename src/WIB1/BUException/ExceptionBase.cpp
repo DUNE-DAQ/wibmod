@@ -1,4 +1,4 @@
-#include <BUException/ExceptionBase.hh>
+#include "wibmod/WIB1/BUException/ExceptionBase.hh"
 
 //Error string for bad allocation of description
 static const char descriptionError[] = "Description allocation failed.\n";

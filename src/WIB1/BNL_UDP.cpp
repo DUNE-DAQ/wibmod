@@ -1,5 +1,5 @@
-#include <WIB/BNL_UDP.hh>
-#include <WIB/BNL_UDP_Exception.hh>
+#include "wibmod/WIB1/BNL_UDP.hh"
+#include "wibmod/WIB1/BNL_UDP_Exception.hh"
 #include <sys/socket.h>
 #include <string.h> //memset, strerror
 #include <errno.h>

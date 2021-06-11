@@ -1,4 +1,4 @@
-#include <WIB/ADC_ASIC_reg_mapping.hh>
+#include "wibmod/WIB1/ADC_ASIC_reg_mapping.hh"
 #include <iostream>
 
 ADC_ASIC_reg_mapping::ADC_ASIC_reg_mapping(): BITS()

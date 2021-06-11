@@ -6,7 +6,7 @@
 //   for creating conversions
 
 
-#include <WIB/ItemConversion.hh>
+#include "wibmod/WIB1/ItemConversion.hh"
 
 #include <stdio.h> // sscanf
 #include <boost/foreach.hpp>
@@ -26,7 +26,7 @@ public:                                                                       \
     init(params);                                                             \
   }                                                                           \
 };*/
-#include "conversions-impl.hh"
+#include "wibmod/WIB1/conversions-impl.hh"
 #undef DEFINE_CONVERSION_CLASS
 #undef STRIP
 #undef EXPAND
@@ -60,7 +60,7 @@ ItemConversion * ItemConversion::FromString(std::string convstring) {
   if (fnname==#name) {                                                       \
     itemconv::itemconv_##name *c = new itemconv::itemconv_##name();          \
     c->init(params); return c; }
-#include "conversions-impl.hh"
+#include "wibmod/WIB1/conversions-impl.hh"
 #undef DEFINE_CONVERSION_CLASS
 
   return NULL;

@@ -1,4 +1,4 @@
-#include <WIB/FE_ASIC_reg_mapping.hh>
+#include "wibmod/WIB1/FE_ASIC_reg_mapping.hh"
 #include <iostream>
 
 FE_ASIC_reg_mapping::FE_ASIC_reg_mapping(): BITS()

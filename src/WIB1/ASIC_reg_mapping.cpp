@@ -1,4 +1,4 @@
-#include <WIB/ASIC_reg_mapping.hh>
+#include "wibmod/WIB1/ASIC_reg_mapping.hh"
 #include <iostream>
 #include <iomanip>
 #include <limits>

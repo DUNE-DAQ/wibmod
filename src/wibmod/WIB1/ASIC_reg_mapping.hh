@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 #include <vector>
-#include <WIB/ADC_ASIC_reg_mapping.hh>
-#include <WIB/FE_ASIC_reg_mapping.hh>
+#include "wibmod/WIB1/ADC_ASIC_reg_mapping.hh"
+#include "wibmod/WIB1/FE_ASIC_reg_mapping.hh"
 
 class ASIC_reg_mapping {
  public:

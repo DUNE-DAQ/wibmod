@@ -1,5 +1,5 @@
-#include <WIB/WIB.hh>
-#include <WIB/WIBException.hh>
+#include "wibmod/WIB1/WIB.hh"
+#include "wibmod/WIB1/WIBException.hh"
 
 void WIB::ConfigWIBFakeData(bool enableFakeFEMB1, bool enableFakeFEMB2, 
                                bool enableFakeFEMB3, bool enableFakeFEMB4, 

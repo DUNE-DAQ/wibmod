@@ -1,6 +1,6 @@
-#include <WIB/WIB.hh>
-#include <WIB/WIBException.hh>
-#include <WIB/BNL_UDP_Exception.hh>
+#include "wibmod/WIB1/WIB.hh"
+#include "wibmod/WIB1/WIBException.hh"
+#include "wibmod/WIB1/BNL_UDP_Exception.hh"
 #include <fstream>
 #include <assert.h>
 #include <algorithm>

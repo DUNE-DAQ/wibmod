@@ -1,8 +1,8 @@
-#include <WIB/WIB.hh>
-#include <WIB/WIBException.hh>
-#include <WIB/FE_ASIC_reg_mapping.hh>
-#include <WIB/ADC_ASIC_reg_mapping.hh>
-#include <WIB/ASIC_reg_mapping.hh>
+#include "wibmod/WIB1/WIB.hh"
+#include "wibmod/WIB1/WIBException.hh"
+#include "wibmod/WIB1/FE_ASIC_reg_mapping.hh"
+#include "wibmod/WIB1/ADC_ASIC_reg_mapping.hh"
+#include "wibmod/WIB1/ASIC_reg_mapping.hh"
 #include <unistd.h>
 #include <sstream>
 #include <iostream>

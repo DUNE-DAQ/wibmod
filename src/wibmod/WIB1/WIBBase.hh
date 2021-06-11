@@ -4,7 +4,7 @@
 #include <string>
 #include <stdint.h>
 
-#include <WIB/AddressTable.hh>
+#include "wibmod/WIB1/AddressTable.hh"
 
 #define FEMB_COUNT 4
 

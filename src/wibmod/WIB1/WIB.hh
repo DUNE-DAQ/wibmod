@@ -1,7 +1,7 @@
 #ifndef __WIB_HH__
 #define __WIB_HH__
 
-#include <WIB/WIBBase.hh>
+#include "wibmod/WIB1/WIBBase.hh"
 #include <stdint.h>
 
 // Keeps artDAQ from complaining about __int128
