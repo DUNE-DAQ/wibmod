@@ -23,8 +23,10 @@ execute_process(COMMAND ${PROTOBUF_PROTOC_EXECUTABLE} --proto_path=${CMAKE_CURRE
 
 daq_add_library( wib.pb *.cpp WIB1/*.cpp WIB1/BUException/*.cpp LINK_LIBRARIES ${Protobuf_LIBRARY} cppzmq appfwk::appfwk logging::logging ers::ers )
 
-daq_codegen( wibconfigurator.jsonnet TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 )
+daq_codegen( *.jsonnet TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 )
 
 daq_add_plugin( WIBConfigurator duneDAQModule LINK_LIBRARIES wibmod )
+
+daq_add_plugin( ProtoWIBConfigurator duneDAQModule LINK_LIBRARIES wibmod )
 
 daq_install()

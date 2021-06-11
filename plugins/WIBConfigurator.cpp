@@ -20,8 +20,6 @@
  * @brief Name used by TRACE TLOG calls from this source file
  */
 #define TRACE_NAME "WIBConfigurator"             // NOLINT
-#define TLVL_ENTER_EXIT_METHODS TLVL_DEBUG + 5   // NOLINT
-#define TLVL_WORK_STEPS TLVL_DEBUG + 10          // NOLINT
 
 namespace dunedaq {
 namespace wibmod {
