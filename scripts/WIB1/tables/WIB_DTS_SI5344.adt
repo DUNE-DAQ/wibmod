@@ -1,0 +1,8 @@
+ENABLE                                                                                    0x0      0x1        rw description="enable" Table="DTS_SI5344" Row="_3" Column="" Status="1"
+RESET                                                                                     0x0      0x2        rw description="reset" Table="DTS_SI5344" Row="_3" Column="" Status="1"
+STATUS                                                                                    0x0      0xC        r  description="LOS & LOL" 
+LOL                                                                                       0x0      0x4        r  description="Loss of lock" Table="DTS_SI5344" Row="_3" Column="" Status="1"
+LOS                                                                                       0x0      0x8        r  description="Loss of signal" Table="DTS_SI5344" Row="_3" Column="" Status="1"
+INTERRUPT                                                                                 0x0      0x10       r  description="Interrupt" Table="DTS_SI5344" Row="_3" Column="" Status="1"
+INPUT_SELECT                                                                              0x0      0x300      rw description="Input select:\n\t00: DTS\n\t01: 25Mhz fixed\n\t10: SMA; 11: Feedback\n" Table="DTS_SI5344" Row="_3" Column="" Status="1" Format="t 0 DTS,1 25Mhz OSC,2 SMA,3 Feedback"
+I2C                                                                                       0x2      I2C.adt

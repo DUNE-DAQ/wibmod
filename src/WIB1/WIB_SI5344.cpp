@@ -3,7 +3,6 @@
 #include <fstream>
 #include <unistd.h> //usleep
 
-#define WIB_CONFIG_PATH "WIB_CONFIG_PATH" 
 #define SI5344_CONFIG_FILENAME "PDTS_SI5344.txt"
 
 void WIB::WriteDTS_SI5344(uint16_t address,uint32_t value,uint8_t byte_count){
@@ -42,9 +41,9 @@ void WIB::LoadConfigDTS_SI5344(std::string const & fileName){
     badFile.Append(fileName.c_str());
 
     //Try the default
-    if(getenv(WIB_CONFIG_PATH) != NULL){      
-      std::string envBasedFileName=getenv(WIB_CONFIG_PATH);
-      envBasedFileName+="/";
+    if(getenv("WIBMOD_SHARE") != NULL){      
+      std::string envBasedFileName=getenv("WIBMOD_SHARE");
+      envBasedFileName+="/scripts/WIB1/config/";
       envBasedFileName+=SI5344_CONFIG_FILENAME;
       confFile.open(envBasedFileName.c_str());
       if(confFile.fail()){

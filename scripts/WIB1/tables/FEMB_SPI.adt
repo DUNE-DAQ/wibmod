@@ -1,0 +1,8 @@
+ASIC0                                   0x00      ASIC_SPI_fine.adt
+ASIC1                                   0x09      ASIC_SPI_fine.adt
+ASIC2                                   0x12      ASIC_SPI_fine.adt
+ASIC3                                   0x1B      ASIC_SPI_fine.adt
+ASIC4                                   0x24      ASIC_SPI_fine.adt
+ASIC5                                   0x2D      ASIC_SPI_fine.adt
+ASIC6                                   0x36      ASIC_SPI_fine.adt
+ASIC7                                   0x3F      ASIC_SPI_fine.adt

@@ -3,7 +3,6 @@
 #include <fstream>
 #include <unistd.h> //usleep
 
-#define WIB_CONFIG_PATH "WIB_CONFIG_PATH" 
 #define SI5342_CONFIG_FILENAME "FELIX_SI5342.txt"
 
 void WIB::WriteDAQ_SI5342(uint16_t address,uint32_t value,uint8_t byte_count){
@@ -42,9 +41,9 @@ void WIB::LoadConfigDAQ_SI5342(std::string const & fileName){
     badFile.Append(fileName.c_str());
 
     //Try the default
-    if(getenv(WIB_CONFIG_PATH) != NULL){      
-      std::string envBasedFileName=getenv(WIB_CONFIG_PATH);
-      envBasedFileName+="/";
+    if(getenv("WIBMOD_SHARE") != NULL){      
+      std::string envBasedFileName=getenv("WIBMOD_SHARE");
+      envBasedFileName+="/scripts/WIB1/config/";
       envBasedFileName+=SI5342_CONFIG_FILENAME;
       confFile.open(envBasedFileName.c_str());
       if(confFile.fail()){

@@ -1,0 +1,10 @@
+ENABLE                                  0x0      0x1        rw description="enable" Table="DAQ_SI5342" Row="_3" Column="" Status="1"
+RESET                                   0x0      0x2        rw description="reset" Table="DAQ_SI5342" Row="_3" Column="" Status="1"
+LOL                                     0x0      0x4        r  description="Loss of lock" Table="DAQ_SI5342" Row="_3" Column="" Status="1"
+LOS_XAXB                                0x0      0x8        r  description="Loss of signal XAXB" Table="DAQ_SI5342" Row="_3" Column="" Status="1"
+INTERRUPT                               0x0      0x10       r  description="Interrupt" Table="DAQ_SI5342" Row="_3" Column="" Status="1"
+LOS_1                                   0x0      0x20       r  description="LOS 1" Table="DAQ_SI5342" Row="_3" Column="" Status="1"
+LOS_2                                   0x0      0x40       r  description="LOS 2" Table="DAQ_SI5342" Row="_3" Column="" Status="1"
+LOS_4                                   0x0      0x100      r  description="LOS 4" Table="DAQ_SI5342" Row="_3" Column="" Status="1"
+INPUT_SELECT                            0x0      0x300      rw description="Input select:\n\t00: DAQ\n\t01: 25Mhz fixed\n\t10: SMA; 11: Feedback\n" Table="DAQ_SI5342" Row="_3" Column="" Status="1" Format="t 0 DAQ,1 16Mhz OSC,2 GND,3 Feedback"
+I2C                                     0x1      I2C.adt

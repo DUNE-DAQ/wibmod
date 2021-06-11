@@ -8,7 +8,6 @@
 
 
 #define MAX_FILE_LEVEL 10
-#define WIB_ADDRESS_TABLE_PATH "WIB_ADDRESS_TABLE_PATH" 
 
 void AddressTable::LoadFile(std::string const & fileName,
 			    std::string const & prefix, uint16_t offset){
@@ -17,9 +16,9 @@ void AddressTable::LoadFile(std::string const & fileName,
   if (!inFile.is_open()){
     std::string envBasedFileName = fileName;
     //Try to use address table path if it exists
-    if(getenv(WIB_ADDRESS_TABLE_PATH) != NULL){      
-      envBasedFileName=getenv(WIB_ADDRESS_TABLE_PATH);
-      envBasedFileName+="/";
+    if(getenv("WIBMOD_SHARE") != NULL){      
+      envBasedFileName=getenv("WIBMOD_SHARE");
+      envBasedFileName+="/scripts/WIB1/tables/";
       envBasedFileName+=fileName;
       inFile.open(envBasedFileName.c_str());
     }    

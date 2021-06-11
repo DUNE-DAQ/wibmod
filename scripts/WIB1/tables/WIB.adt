@@ -1,0 +1,66 @@
+SBND                                    0x0        WIB_SBND_REGS.adt
+SYSTEM                                  0x100      WIB_SYSTEM.adt 
+DTS                                     0x200      WIB_DTS.adt
+DQM_CTRL.enable_DQM_packets             0x800      0x1        rw description="enable DQM packets"
+DQM_CTRL.DQM_type                       0x800      0xf0       rw description="DQM type"
+DQM_CD_SS.stream_number                 0x801      0x1        rw description="stream_number"
+DQM_CD_SS.CD_number                     0x801      0x2        rw description="CD_number"
+DQM_CD_SS.FEMB_number                   0x801      0xc        rw description="FEMB_number"
+DQM_CD_SS.sub_stream_number             0x801      0x10       rw description="sub_stream number (for jack mode)"
+POWER                                   0x400      WIB_FEMB_POWER.adt
+FEMB_CNC.CnC_Clock_Select               0x500      0x1        rw description="CnC Clock Select"
+FEMB_CNC.CnC_Command_Select             0x500      0x2        rw description="CnC Command Select"
+FEMB_CNC.ENABLE_CONVERTS                0x500      0x4        rw description="Enable convert signals down to the FEMBs, converts sent after first convert"
+FEMB_CNC.PASSING_CONVERTS               0x500      0x8        r  description="Converts are headind down to the FEMB"
+FEMB_CNC.CLK_RESET                      0x500      0x10       rw description="Reset ext CnC comm clock"
+FEMB_CNC.LOCKED                         0x500      0x20       r  description="ext CnC comm clock locked"
+FEMB_CNC.FEMB_STOP                      0x500      0x100      a  description="stop FEMB data"
+FEMB_CNC.FEMB_START                     0x500      0x200      a  description="start FEMB data"
+FEMB_CNC.TIMESTAMP_RESET                0x500      0x400      a  description="reset FEMB timestamp"
+FEMB_CNC.SEND_CALIBRATION               0x500      0x800      a  description="send calibration pulse"
+FEMB_CNC.ENABLE_DTS_CMDS                0x500      0x1000     rw description="allow DTS commands to go to the FEMBs"
+FEMB_CNC.ENABLE_TP_CMDS                 0x500      0x2000     rw description="allow DTS command 0x6 to cause the test pulse command to go to the FEMBs"
+FEMB_SPY                                0x900      WIB_FEMB_SPY.adt
+FEMB_REPLACE_FEMB_3_N_5_WITH_1_N_2      0xFFF      0x1        rw description="BE CAREFUL! This replaces real FEMB3/4 data with FEMB1/2 data for testing. You probably want this to be zero!" Table="SYS" Row="FEMB swapping" Column="LOOK_AT_ME!" Status="9" Show="nz" slowcontrol
+FEMB1.DAQ                               0x1000     WIB_FEMB_DAQ.adt
+FEMB2.DAQ                               0x2000     WIB_FEMB_DAQ.adt
+FEMB3.DAQ                               0x3000     WIB_FEMB_DAQ.adt
+FEMB4.DAQ                               0x4000     WIB_FEMB_DAQ.adt
+DAQ.QSFP                                0x5001     WIB_DAQ_QSFP.adt
+DAQ_CONTROL.reset                       0x5000     0x1        rw description="reset"
+DAQ_CONTROL.reconfigure_reset           0x5000     0x2        rw description="reconfigure reset"
+DAQ.SI5342                              0x5010     WIB_DAQ_SI5342.adt
+DAQ.RX.A_RESET                          0x5014     0x1        rw description="Rx analog reset" Table="FELIX_Rx" Row="_3" Column=""
+DAQ.RX.D_RESET                          0x5014     0x2        rw description="Rx digital reset" Table="FELIX_Rx" Row="_3" Column=""
+DAQ.RX.LOCKED_TO_REF                    0x5014     0x4        r  description="Rx locked to reference" Table="FELIX_Rx" Row="_3" Column=""
+DAQ.RX.LOCKED_TO_DATA                   0x5014     0x8        r  description="Rx locked to data" Table="FELIX_Rx" Row="_3" Column=""
+DAQ.RX.CAL_BUSY                         0x5014     0x10       r  description="Rx calibration busy" Table="FELIX_Rx" Row="_3" Column=""
+DAQ.DEBUG_CLK_COUNTER                   0x5020     0xFFFFFFFF r  description="Counter on event builder clock domain"
+DAQ.DEBUG_EB_WRITE_STATE                0x5021     0xF        r  description="Event builder clock domain write state"
+DAQ.DEBUG_WRITE_COUNT                   0x5022     0xFFFFFFFF r  description="Count of write starts for the EB clock domain"
+DAQ.HISTORY_ARM                         0x5023     0x1        a  description="Arm history capture"
+DAQ.HISTORY_DATA1                       0x5024     0x3F3      ri description="history capture"
+DAQ.HISTORY_DATA2                       0x5025     0xFFFFFFFF r  description="history capture"
+DAQ.HISTORY_DATA3                       0x5026     0xFFFFFFFF r  description="history capture"
+DAQ_LINK_1                              0x5100     WIB_DAQ_LINK.adt
+DAQ_LINK_2                              0x5200     WIB_DAQ_LINK.adt
+DAQ_LINK_3                              0x5300     WIB_DAQ_LINK.adt
+DAQ_LINK_4                              0x5400     WIB_DAQ_LINK.adt
+FLASH                                   0xf000     WIB_FLASH.adt
+REG_TEST.0                              0xfff0     0xffffffff rw description="test reg clock 0" Table="Reg_Test" Row="_2" Column="data" Status="99" slowcontrol
+REG_TEST.1                              0xfff1     0xffffffff rw description="test reg clock 1" Table="Reg_Test" Row="_2" Column="data" Status="99" slowcontrol
+REG_TEST.2                              0xfff2     0xffffffff rw description="test reg clock 2" Table="Reg_Test" Row="_2" Column="data" Status="99"
+REG_TEST.3                              0xfff3     0xffffffff rw description="test reg clock 3" Table="Reg_Test" Row="_2" Column="data" Status="99"
+REG_TEST.4                              0xfff4     0xffffffff rw description="test reg clock 4" Table="Reg_Test" Row="_2" Column="data" Status="99"
+REG_TEST.5                              0xfff5     0xffffffff rw description="test reg clock 5" Table="Reg_Test" Row="_2" Column="data" Status="99"
+REG_TEST.6                              0xfff6     0xffffffff rw description="test reg clock 5" Table="Reg_Test" Row="_2" Column="data" Status="99"
+REG_CLKS                                0xfffC           0x7f r  description="Locked clock domain"
+REG_CLKS.0                              0xfffC            0x1 r  description="Locked clock domain 0" Table="Reg_Test" Row="_2" Column="Locked" Status="99"
+REG_CLKS.1                              0xfffC            0x2 r  description="Locked clock domain 1" Table="Reg_Test" Row="_2" Column="Locked" Status="99"
+REG_CLKS.2                              0xfffC            0x4 r  description="Locked clock domain 2" Table="Reg_Test" Row="_2" Column="Locked" Status="99"
+REG_CLKS.3                              0xfffC            0x8 r  description="Locked clock domain 3" Table="Reg_Test" Row="_2" Column="Locked" Status="99"
+REG_CLKS.4                              0xfffC           0x10 r  description="Locked clock domain 4" Table="Reg_Test" Row="_2" Column="Locked" Status="99"
+REG_CLKS.5                              0xfffC           0x20 r  description="Locked clock domain 5" Table="Reg_Test" Row="_2" Column="Locked" Status="99"
+REG_CLKS.6                              0xfffC           0x40 r  description="Locked clock domain 6" Table="Reg_Test" Row="_2" Column="Locked" Status="99"
+REG_READS                               0xfffD     0xffffffff r  description="Total UDP read cycles" slowcontrol
+REG_WRITES                              0xfffE     0xffffffff r  description="Total UDP write cycles" slowcontrol

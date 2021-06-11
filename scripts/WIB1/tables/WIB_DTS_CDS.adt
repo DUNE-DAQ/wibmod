@@ -1,0 +1,5 @@
+INPUT_SELECT                            0x0      0x1        rw description="Front panel/back plane input select"  Table="DTS_CDS" Row="_3" Column="" Status="1" Format="t 0 Back-plane,1 Front panel SFP"
+STATUS                                  0x0      0x6        r  description="LOS & LOL" 
+LOL                                     0x0      0x2        r  description="Loss of lock" Table="DTS_CDS" Row="_3" Column="" Status="1" slowcontrol
+LOS                                     0x0      0x4        r  description="Loss of signal" Table="DTS_CDS" Row="_3" Column="" Status="1" slowcontrol
+I2C                                     0x2      I2C.adt

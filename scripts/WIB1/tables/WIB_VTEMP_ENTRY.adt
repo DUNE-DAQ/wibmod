@@ -1,0 +1,4 @@
+VCC                             0x0      0x00007FFF       r  description="voltage: (LSB * 305.18μV) + 2.5V " Table="FEMB_PWR" Row="_3" Column="_2" Status="2"   slowcontrol sc_conv="linear scale=305.18e-6 offset=2.5"
+VCC_VALID                       0x0      0x00008000       r  description="Voltage data valid" Table="FEMB_PWR" Row="_3" Column="_2" Status="3"
+TEMP                            0x0      0x7FFF0000       r  description="temp: LSB * 0.0625 Degrees" Table="FEMB_PWR" Row="_3" Column="_2" Status="2"           slowcontrol sc_conv="linear scale=0.0625 offset=0"
+TEMP_VALID                      0x0      0x80000000       r  description="Current data valid" Table="FEMB_PWR" Row="_3" Column="_2" Status="3"

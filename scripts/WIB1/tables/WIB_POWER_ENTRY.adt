@@ -1,0 +1,6 @@
+V                               0x0      0x00007FFF       r  description="Voltage: (LSB = 305.18μV) " Table="FEMB_PWR" Row="_3._4" Column="_2" Status="2" slowcontrol sc_conv="linear scale=305.18e-6"
+V_VALID                         0x0      0x00008000       r  description="Voltage data valid" Table="FEMB_PWR" Row="_3._4" Column="_2" Status="3"
+V.HUMAN                         0x0      0x00007FE0       r  description="Voltage (10s of mVs)" Table="FEMB_PWR_HUMAN" Row="_3._4" Column="_2" Status="1" Format="d"
+I                               0x0      0x7FFF0000       r  description="Current: (LSB = 3.0518mA) " Table="FEMB_PWR" Row="_3._4" Column="_2" Status="2" slowcontrol sc_conv="linear scale=3.0518e-3"
+I_VALID                         0x0      0x80000000       r  description="Current data valid" Table="FEMB_PWR" Row="_3._4" Column="_2" Status="3"
+I.HUMAN                         0x0      0x7FE00000       r  description="Voltage (mAs)" Table="FEMB_PWR_HUMAN" Row="_3._4" Column="_2" Status="1" Format="d"

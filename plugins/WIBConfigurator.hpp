@@ -2,7 +2,7 @@
  * @file WIBConfigurator.hpp
  *
  * WIBConfigurator is a simple DAQModule implementation that provides a
- * configuration and monitoring interface to the WIB
+ * configuration and monitoring interface to the WIB2
  *
  * Based on DataGenerator by Kurt Biery
  *

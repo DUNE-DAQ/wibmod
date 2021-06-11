@@ -1,0 +1,61 @@
+ENABLE                                  0x00      0x1f1f1f1f       rw description="FEMB 1-4 powers"
+ENABLE.FEMB1                            0x00      0x0000001f       rw description="FEMB 1 powers" slowcontrol sc_conv="enum 0=OFF 0x1f=ON"
+ENABLE.FEMB1.EN.3V6                        0x00      0x00000001       rw description="FEMB 1 EN 3.6 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB1.EN.2V8                        0x00      0x00000002       rw description="FEMB 1 EN 2.8 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB1.EN.2V5                        0x00      0x00000004       rw description="FEMB 1 EN 2.5 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB1.EN.1V5                        0x00      0x00000008       rw description="FEMB 1 EN 1.5 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB1.EN.BIAS                       0x00      0x00000010       rw description="FEMB 1 EN Bias V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB2                            0x00      0x00001f00       rw description="FEMB 2 powers" slowcontrol sc_conv="enum 0=OFF 0x1f=ON"
+ENABLE.FEMB2.EN.3V6                     0x00      0x00000100       rw description="FEMB 2 EN 3.6 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB2.EN.2V8                     0x00      0x00000200       rw description="FEMB 2 EN 2.8 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB2.EN.2V5                     0x00      0x00000400       rw description="FEMB 2 EN 2.5 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB2.EN.1V5                     0x00      0x00000800       rw description="FEMB 2 EN 1.5 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB2.EN.BIAS                    0x00      0x00001000       rw description="FEMB 2 EN Bias V"  Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB3                            0x00      0x001f0000       rw description="FEMB 3 powers" slowcontrol sc_conv="enum 0=OFF 0x1f=ON"
+ENABLE.FEMB3.EN.3V6                     0x00      0x00010000       rw description="FEMB 3 EN 3.6 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB3.EN.2V8                     0x00      0x00020000       rw description="FEMB 3 EN 2.8 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB3.EN.2V5                     0x00      0x00040000       rw description="FEMB 3 EN 2.5 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB3.EN.1V5                     0x00      0x00080000       rw description="FEMB 3 EN 1.5 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB3.EN.BIAS                    0x00      0x00100000       rw description="FEMB 3 EN Bias V"  Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB4                            0x00      0x1f000000       rw description="FEMB 4 powers" slowcontrol sc_conv="enum 0=OFF 0x1f=ON"
+ENABLE.FEMB4.EN.3V6                     0x00      0x01000000       rw description="FEMB 4 EN 3.6 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB4.EN.2V8                     0x00      0x02000000       rw description="FEMB 4 EN 2.8 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB4.EN.2V5                     0x00      0x04000000       rw description="FEMB 4 EN 2.5 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB4.EN.1V5                     0x00      0x08000000       rw description="FEMB 4 EN 1.5 V" Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.FEMB4.EN.BIAS                    0x00      0x10000000       rw description="FEMB 4 EN Bias V"  Table="FEMB_PWR" Row="_5._4" Column="_3" Status="1"
+ENABLE.MASTER_BIAS                      0x00      0x80000000       rw description="Master enable for FEMB Bias"  
+MON.reset                               0x01      0x00000001       rw description="Hold power monitoring in reset"
+BIAS                                    0x02      WIB_VTEMP_ENTRY.adt
+FEMB1                                   0x10       WIB_VTEMP_ENTRY.adt
+FEMB1.3V6                               0x11       WIB_POWER_ENTRY.adt
+FEMB1.2V8                               0x12       WIB_POWER_ENTRY.adt
+FEMB1.2V5                               0x13       WIB_POWER_ENTRY.adt
+FEMB1.1V5                               0x14       WIB_POWER_ENTRY.adt
+FEMB1.BIAS                              0x15       WIB_POWER_ENTRY.adt
+FEMB1.FE_2V5                            0x16       WIB_POWER_ENTRY.adt
+FEMB2                                   0x20       WIB_VTEMP_ENTRY.adt
+FEMB2.3V6                               0x21       WIB_POWER_ENTRY.adt
+FEMB2.2V8                               0x22       WIB_POWER_ENTRY.adt
+FEMB2.2V5                               0x23       WIB_POWER_ENTRY.adt
+FEMB2.1V5                               0x24       WIB_POWER_ENTRY.adt
+FEMB2.BIAS                              0x25       WIB_POWER_ENTRY.adt
+FEMB2.FE_2V5                            0x26       WIB_POWER_ENTRY.adt
+FEMB3                                   0x30       WIB_VTEMP_ENTRY.adt
+FEMB3.3V6                               0x31       WIB_POWER_ENTRY.adt
+FEMB3.2V8                               0x32       WIB_POWER_ENTRY.adt
+FEMB3.2V5                               0x33       WIB_POWER_ENTRY.adt
+FEMB3.1V5                               0x34       WIB_POWER_ENTRY.adt
+FEMB3.BIAS                              0x35       WIB_POWER_ENTRY.adt
+FEMB3.FE_2V5                            0x36       WIB_POWER_ENTRY.adt
+FEMB4                                   0x40       WIB_VTEMP_ENTRY.adt
+FEMB4.3V6                               0x41       WIB_POWER_ENTRY.adt
+FEMB4.2V8                               0x42       WIB_POWER_ENTRY.adt
+FEMB4.2V5                               0x43       WIB_POWER_ENTRY.adt
+FEMB4.1V5                               0x44       WIB_POWER_ENTRY.adt
+FEMB4.BIAS                              0x45       WIB_POWER_ENTRY.adt
+FEMB4.FE_2V5                            0x46       WIB_POWER_ENTRY.adt
+WIB                                     0x50       WIB_VTEMP_ENTRY.adt
+WIB.5V                                  0x51       WIB_POWER_ENTRY.adt
+WIB.1V8                                 0x52       WIB_POWER_ENTRY.adt
+WIB.3V6                                 0x53       WIB_POWER_ENTRY.adt
+WIB.2V8                                 0x54       WIB_POWER_ENTRY.adt

@@ -1,0 +1,16 @@
+CONTROL.reset                           0x0000     0x1        rw description="reset"
+CONTROL.reconfigure_reset               0x0000     0x2        rw description="reconfigure reset"
+ENABLE                                  0x0000     0xF0       rw description="FEMB links enabled for capture"
+LINK1.ENABLE                            0x0000     0x10       rw description="FEMB link enabled for capture" Table="FEMB_rx" Row="_1._3" Column="0_Enabled" Status="1" slowcontrol sc_conv="enum 0=DISABLED 1=ENABLED"  
+LINK2.ENABLE                            0x0000     0x20       rw description="FEMB link enabled for capture" Table="FEMB_rx" Row="_1._3" Column="0_Enabled" Status="1" slowcontrol sc_conv="enum 0=DISABLED 1=ENABLED"
+LINK3.ENABLE                            0x0000     0x40       rw description="FEMB link enabled for capture" Table="FEMB_rx" Row="_1._3" Column="0_Enabled" Status="1" slowcontrol sc_conv="enum 0=DISABLED 1=ENABLED"
+LINK4.ENABLE                            0x0000     0x80       rw description="FEMB link enabled for capture" Table="FEMB_rx" Row="_1._3" Column="0_Enabled" Status="1" slowcontrol sc_conv="enum 0=DISABLED 1=ENABLED"
+TRIGGER.convert_delay_CD1.1             0x0001     0xff       rw description="convert delay CD1.1"
+TRIGGER.convert_delay_CD1.2             0x0001     0xff00     rw description="convert delay CD1.2"
+TRIGGER.convert_delay_CD2.1             0x0001     0xff0000   rw description="convert delay CD2.1"
+TRIGGER.convert_delay_CD2.2             0x0001     0xff000000 rw description="convert delay CD2.2"
+FAKE_CD                                 0x0010     WIB_FEMB_FAKE_CD.adt
+LINK1                                   0x0100     WIB_FEMB_DAQ_STREAM.adt
+LINK2                                   0x0200     WIB_FEMB_DAQ_STREAM.adt
+LINK3                                   0x0300     WIB_FEMB_DAQ_STREAM.adt
+LINK4                                   0x0400     WIB_FEMB_DAQ_STREAM.adt
