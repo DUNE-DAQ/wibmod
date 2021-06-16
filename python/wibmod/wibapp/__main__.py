@@ -82,20 +82,24 @@ def generate_boot( wibapp_spec: dict) -> dict:
 import click
 
 @click.command(context_settings=CONTEXT_SETTINGS)
-@click.option('-w', '--wibserver', nargs=2, multiple=True, default='LOCAL tcp://localhost:1234')
+@click.option('-w', '--wibserver', nargs=2, multiple=True) # e.g. -w TESTSTAND tcp://192.168.121.1:1234
+@click.option('-p', '--protowib', nargs=2, multiple=True) # e.g. -p TESTSTAND 192.168.121.1
 @click.argument('json_dir', type=click.Path())
-def cli(wibserver, json_dir):
+def cli(wibserver, protowib, json_dir):
     '''
       JSON_DIR: Json file output folder
     '''
     console.log('Loading wibapp config generator')
     from . import wibapp_gen
     
+    print(wibserver,protowib)
     wibservers = {k:v for k,v in wibserver}
+    protowibs = {k:v for k,v in protowib}
     
     console.log(f'Generating configs')
     cmd_data = wibapp_gen.generate(
-        WIBSERVERS=wibservers
+        WIBSERVERS=wibservers,
+        PROTOWIBS=protowibs
     )
 
     console.log('wibapp cmd data:', cmd_data)
@@ -110,7 +114,7 @@ def cli(wibserver, json_dir):
 
     jf_wibapp = join(data_dir, app_wibapp)
 
-    cmd_set = ['init', 'conf', 'start', 'stop', 'pause', 'resume', 'scrap']
+    cmd_set = ['init', 'conf', 'settings', 'start', 'pause', 'resume', 'stop', 'scrap']
     for app,data in ((app_wibapp, cmd_data),):
         console.log(f'Generating {app} command data json files')
         for c in cmd_set:

@@ -9,9 +9,10 @@ local types = {
 
     value : s.number("Value", "u4", doc="A digitally variable value"),
     
-    bool : s.number("Boolean", "u4", doc="1/0 for enable/disabled or true/false"),
+    bool : s.number("Bool", "u4", doc="1/0 for enable/disabled or true/false"),
 
-    femb: s.record("FEMBConf", [
+    femb_configure: s.record("FEMBSettings", [
+    
         s.field("enabled", self.bool, 1,
                 doc="True of FEMB should be configured and read out by WIB"),
     
@@ -41,22 +42,31 @@ local types = {
                 doc="64MHz periods to skip after 2MHz edge for strobe (pulser offset 0-255)"),
         s.field("strobe_length", self.value, 255,
                 doc="Length of strobe in 64MHz periods (pulser length 0-255)")
+                
     ], doc="FEMB channel settings"),
 
-    conf: s.record("WIBConf", [
-        s.field("wib_addr", self.zmqaddr, "tcp://192.168.121.1:1234",
-                doc="The ZeroMQ network address for the WIB to interact with"),
+    configure: s.record("WIBSettings", [
+  
         s.field("cold", self.bool, 0,
                 doc="True if the front end electronics are COLD (77k)"),
         s.field("pulser", self.bool, 0,
                 doc="True if the calibration pulser should be enabled"),
         s.field("adc_test_pattern", self.bool, 0,
                 doc="True if the COLDADC test pattern should be enabled"),
-        s.field("femb0", self.femb, doc="Configuration for FEMB in slot 0"),
-        s.field("femb1", self.femb, doc="Configuration for FEMB in slot 1"),
-        s.field("femb2", self.femb, doc="Configuration for FEMB in slot 2"),
-        s.field("femb3", self.femb, doc="Configuration for FEMB in slot 3")
-    ], doc="WIB system settings")
+                
+        s.field("femb0", self.femb_configure, doc="Settings for FEMB in slot 0"),
+        s.field("femb1", self.femb_configure, doc="Settings for FEMB in slot 1"),
+        s.field("femb2", self.femb_configure, doc="Settings for FEMB in slot 2"),
+        s.field("femb3", self.femb_configure, doc="Settings for FEMB in slot 3")
+        
+    ], doc="WIB system settings (argument to settings)"),
+    
+    conf: s.record("WIBConf", [
+    
+        s.field("wib_addr", self.zmqaddr, "tcp://192.168.121.1:1234",
+                doc="The ZeroMQ network address for the WIB to interact with")
+                
+    ], doc="WIB module settings (argument to conf)")
 
 };
 

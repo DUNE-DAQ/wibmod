@@ -28,8 +28,10 @@ WIBConfigurator::WIBConfigurator(const std::string& name)
   : dunedaq::appfwk::DAQModule(name)
 {
   register_command("conf", &WIBConfigurator::do_conf);
+  register_command("settings", &WIBConfigurator::do_settings);
   register_command("start", &WIBConfigurator::do_start);
   register_command("stop", &WIBConfigurator::do_stop);
+  register_command("scrap", &WIBConfigurator::do_scrap);
 }
 
 void
@@ -37,8 +39,8 @@ WIBConfigurator::init(const data_t&)
 {
 }
 
-const wibconfigurator::FEMBConf & 
-WIBConfigurator::femb_conf_i(const wibconfigurator::WIBConf &conf, size_t i)
+const wibconfigurator::FEMBSettings & 
+WIBConfigurator::femb_conf_i(const wibconfigurator::WIBSettings &conf, size_t i)
 {
   switch(i) {
     case 0:
@@ -55,7 +57,7 @@ WIBConfigurator::femb_conf_i(const wibconfigurator::WIBConf &conf, size_t i)
 }
 
 void
-WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const wibconfigurator::FEMBConf &conf)
+WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const wibconfigurator::FEMBSettings &conf)
 {
   femb_conf->set_enabled(conf.enabled);
 
@@ -75,14 +77,26 @@ WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf,
   femb_conf->set_strobe_length(conf.strobe_length);
 }
 
-void
+void 
 WIBConfigurator::do_conf(const data_t& payload)
 {
+
   const wibconfigurator::WIBConf &conf = payload.get<wibconfigurator::WIBConf>();
 
+  TLOG_DEBUG(0) << "WIBConfigurator " << get_name() << " is " << conf.wib_addr;
+  
   wib = std::unique_ptr<WIBCommon>(new WIBCommon(conf.wib_addr));
 
-  TLOG_DEBUG(0) << "Building WIB config for " << conf.wib_addr;
+  TLOG_DEBUG(0) << get_name() << " successfully initialized";
+}
+
+void
+WIBConfigurator::do_settings(const data_t& payload)
+{
+
+  const wibconfigurator::WIBSettings &conf = payload.get<wibconfigurator::WIBSettings>();
+  
+  TLOG_DEBUG(0) << "Building WIB config for " << get_name();
   wib::ConfigureWIB req;
   req.set_cold(conf.cold);
   req.set_pulser(conf.pulser);
@@ -90,22 +104,22 @@ WIBConfigurator::do_conf(const data_t& payload)
 
   for(size_t iFEMB = 0; iFEMB < 4; iFEMB++)
   {
-    TLOG_DEBUG(0) << "Building FEMB " << iFEMB << " config for " << conf.wib_addr;
+    TLOG_DEBUG(0) << "Building FEMB " << iFEMB << " config for " << get_name();
     wib::ConfigureWIB::ConfigureFEMB *femb_conf = req.add_fembs();
     populate_femb_conf(femb_conf,femb_conf_i(conf,iFEMB));
   }
 
-  TLOG_DEBUG(0) << "Sending WIB configuration to " << conf.wib_addr;
+  TLOG_DEBUG(0) << "Sending WIB configuration to " << get_name();
   wib::Status rep;
   wib->send_command(req,rep);
   
   if (rep.success())
   {
-    TLOG_DEBUG(0) << conf.wib_addr << " successfully configured";
+    TLOG_DEBUG(0) << get_name() << " successfully configured";
   }
   else
   {
-    TLOG_DEBUG(0) << conf.wib_addr << " failed to configure";
+    TLOG_DEBUG(0) << get_name() << " failed to configure";
     throw ConfigurationFailed(ERS_HERE, get_name());
   }
 }
@@ -120,6 +134,13 @@ void
 WIBConfigurator::do_stop(const data_t&)
 {
   TLOG_DEBUG(0) << get_name() << " successfully stopped";
+}
+
+void
+WIBConfigurator::do_scrap(const data_t&)
+{
+  wib = NULL;
+  TLOG_DEBUG(0) << get_name() << " successfully scrapped";
 }
 
 

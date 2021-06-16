@@ -52,12 +52,14 @@ private:
 
   // Commands
   void do_conf(const data_t&);
+  void do_settings(const data_t&);
   void do_start(const data_t&);
   void do_stop(const data_t&);
+  void do_scrap(const data_t&);
   
   // Helpers
-  void populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const wibconfigurator::FEMBConf &conf);
-  const wibconfigurator::FEMBConf& femb_conf_i(const wibconfigurator::WIBConf &conf, size_t i);
+  void populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const wibconfigurator::FEMBSettings &conf);
+  const wibconfigurator::FEMBSettings& femb_conf_i(const wibconfigurator::WIBSettings &conf, size_t i);
 
 };
 

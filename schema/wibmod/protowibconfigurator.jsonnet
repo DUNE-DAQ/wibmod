@@ -11,13 +11,14 @@ local types = {
 
     value : s.number("Value", "u4", doc="A digitally variable value"),
     
-    bool : s.number("Boolean", "u4", doc="1/0 for enable/disabled or true/false"),
+    bool : s.number("Bool", "u4", doc="1/0 for enable/disabled or true/false"),
     
     phase : s.number("Phase", "u2", doc="A 16bit clock phase value"),
     
     phases : s.sequence("Phases", self.phase, doc="A list of 16bit clock phases"),
 
-    femb: s.record("FEMBConf", [
+    femb_settings: s.record("FEMBSettings", [
+    
         s.field("enabled", self.bool, 1,
                 doc="True of FEMB should be configured and read out by WIB"),
         
@@ -67,14 +68,8 @@ local types = {
                 
     ], doc="FEMB settings"),
 
-    conf: s.record("WIBConf", [
-        s.field("wib_addr", self.address, "192.168.121.1",
-                doc="The network address for the WIB to interact with"),
-        
-        s.field("wib_table", self.setting, "WIB.adt",
-                doc="FEMB register map"),
-        s.field("femb_table", self.setting, "PDUNE_FEMB_323.adt",
-                doc="FEMB register map"),
+    settings: s.record("WIBSettings", [
+    
         #crying shame that jsonnet doesn't support hex literals
         s.field("expected_wib_fw_version", self.value, 403121409,
                 doc="This must match the WIB firmware version"),
@@ -92,10 +87,10 @@ local types = {
         s.field("partition_number", self.option, 0,
                 doc="which timing system partion or 'timing group' to use"),
                 
-        s.field("femb1", self.femb, doc="Configuration for FEMB in slot 1"),
-        s.field("femb2", self.femb, doc="Configuration for FEMB in slot 2"),
-        s.field("femb3", self.femb, doc="Configuration for FEMB in slot 3"),
-        s.field("femb4", self.femb, doc="Configuration for FEMB in slot 4"),
+        s.field("femb1", self.femb_settings, doc="Configuration for FEMB in slot 1"),
+        s.field("femb2", self.femb_settings, doc="Configuration for FEMB in slot 2"),
+        s.field("femb3", self.femb_settings, doc="Configuration for FEMB in slot 3"),
+        s.field("femb4", self.femb_settings, doc="Configuration for FEMB in slot 4"),
         
         s.field("continue_on_femb_reg_read_error", self.bool, 0,
                 doc="if true, continue on to the next FEMB if you can't seem to control an FEMB instead of raising exception"),
@@ -115,9 +110,21 @@ local types = {
         s.field("start_felix_links_at_run_start", self.bool, 0,
                 doc="Start FELIX links in start transition, else during configure transition"),
         s.field("stop_felix_links_at_run_stop", self.bool, 0,
-                doc="Stop FELIX links in stop transition, else don't stop"),
-        
-    ], doc="ProtoWIB system settings")
+                doc="Stop FELIX links in stop transition, else don't stop")
+                
+    ], doc="ProtoWIB system settings (argument to settings)"),
+    
+    conf: s.record("WIBConf", [
+    
+        s.field("wib_addr", self.address, "192.168.121.1",
+                doc="The network address for the WIB to interact with"),
+                
+        s.field("wib_table", self.setting, "WIB.adt",
+                doc="FEMB register map file"),
+        s.field("femb_table", self.setting, "PDUNE_FEMB_323.adt",
+                doc="FEMB register map file")
+                
+    ], doc="ProtoWIB module settings (argument to conf)")
 
 };
 

@@ -12,6 +12,8 @@ moo.otypes.load_types('appfwk/cmd.jsonnet')
 moo.otypes.load_types('appfwk/app.jsonnet')
 
 moo.otypes.load_types('wibmod/wibconfigurator.jsonnet')
+from appfwk.utils import mspec
+moo.otypes.load_types('wibmod/protowibconfigurator.jsonnet')
 
 # Import new types
 import dunedaq.cmdlib.cmd as basecmd
@@ -19,13 +21,11 @@ import dunedaq.rcif.cmd as rccmd
 import dunedaq.appfwk.cmd as cmd
 import dunedaq.appfwk.app as app
 import dunedaq.wibmod.wibconfigurator as wibcfg
+import dunedaq.wibmod.protowibconfigurator as protowibcfg
 
-from appfwk.utils import mcmd, mrccmd, mspec
 
 import json
 import math
-from pprint import pprint
-
 
 #===============================================================================
 def acmd(mods: list) -> cmd.CmdObj:
@@ -49,17 +49,24 @@ def acmd(mods: list) -> cmd.CmdObj:
 
 #===============================================================================
 def generate(
-        WIBSERVERS: dict = {'LOCAL':'tcp://localhost:1234'},
+        WIBSERVERS: dict = {},
+        PROTOWIBS: dict = {},
 ):
     '''
-    Here an entire application consisting only of WIBConfigurator modules is 
-    generated. The WIBSERVERS dict should map nicknames to hostnames for each
-    WIB desired in the application. WIBConfigurator modules will be generated
-    with names derived by appending 'wib' to the nicknames. 
+    Here an entire application consisting only of (Proto)WIBConfigurator modules 
+    is generated. 
+    
+    The WIBSERVERS dict should map nicknames to zmq endpoints for each WIB2 
+    desired in the application. WIBConfigurator modules will be generated with 
+    names derived by appending 'wib' to the nicknames. 
+    
+    The PROTOWIBS should similarly map nicknames to UDP IP addresses of the WIB1
+    desired in the applicaiton. ProtoWIBConfigurator modules will be generated
+    with named derived by appending 'protowib' to the nicknames.
     '''
     cmd_data = {}
     
-    # Definequeues
+    # Define queues
     
     queue_bare_specs = [
     ]
@@ -70,6 +77,9 @@ def generate(
     mod_specs = [
         mspec(f'wib{nickname}', 'WIBConfigurator', [ ])
         for nickname in WIBSERVERS
+    ] + [
+        mspec(f'protowib{nickname}', 'ProtoWIBConfigurator', [ ])
+        for nickname in PROTOWIBS
     ]
     
     # Define commands
@@ -78,23 +88,49 @@ def generate(
 
     cmd_data['conf'] = acmd([
         (f'wib{nickname}', wibcfg.WIBConf(
-          wib_addr = hostname,
-          femb0 = wibcfg.FEMBConf(),
-          femb1 = wibcfg.FEMBConf(),
-          femb2 = wibcfg.FEMBConf(),
-          femb3 = wibcfg.FEMBConf()
+          wib_addr = endpoint
         ))
-        for nickname,hostname in WIBSERVERS.items()
+        for nickname,endpoint in WIBSERVERS.items()
+    ]+[
+        (f'protowib{nickname}', wibcfg.WIBConf(
+          wib_addr = ip
+        ))
+        for nickname,ip in PROTOWIBS.items()
     ])
 
-    cmd_data['start'] = acmd([
-        (f'wib{nickname}', None) #FIXME
+    cmd_data['settings'] = acmd([
+        (f'wib{nickname}', wibcfg.WIBSettings(
+          femb0 = wibcfg.FEMBSettings(),
+          femb1 = wibcfg.FEMBSettings(),
+          femb2 = wibcfg.FEMBSettings(),
+          femb3 = wibcfg.FEMBSettings()
+        ))
         for nickname in WIBSERVERS
+    ]+[
+        (f'protowib{nickname}', protowibcfg.WIBSettings(
+          femb1 = protowibcfg.FEMBSettings(),
+          femb2 = protowibcfg.FEMBSettings(),
+          femb3 = protowibcfg.FEMBSettings(),
+          femb4 = protowibcfg.FEMBSettings()
+        ))
+        for nickname in PROTOWIBS
+    ])
+    
+    startpars = rccmd.StartParams(run=1)
+    cmd_data['start'] = acmd([
+        (f'wib{nickname}', startpars)
+        for nickname in WIBSERVERS
+    ]+[
+        (f'protowib{nickname}', startpars)
+        for nickname in PROTOWIBS
     ])
 
     cmd_data['stop'] = acmd([
         (f'wib{nickname}', None)
         for nickname in WIBSERVERS
+    ]+[
+        (f'protowib{nickname}', None)
+        for nickname in PROTOWIBS
     ])
     
     cmd_data['pause'] = acmd([
@@ -104,7 +140,11 @@ def generate(
     ])
 
     cmd_data['scrap'] = acmd([
-        ('', None)
+        (f'wib{nickname}', None)
+        for nickname in WIBSERVERS
+    ]+[
+        (f'protowib{nickname}', None)
+        for nickname in PROTOWIBS
     ])
 
     return cmd_data

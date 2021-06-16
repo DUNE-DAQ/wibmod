@@ -51,14 +51,15 @@ private:
 
   // Commands
   void do_conf(const data_t&);
-  void do_configure(const data_t&);
+  void do_settings(const data_t&);
   void do_start(const data_t&);
   void do_stop(const data_t&);
+  void do_scrap(const data_t&);
   
-  const protowibconfigurator::FEMBConf& femb_conf_i(const protowibconfigurator::WIBConf &conf, size_t i);
+  const protowibconfigurator::FEMBSettings& femb_conf_i(const protowibconfigurator::WIBSettings &conf, size_t i);
   
-  void setup_femb_fake_data(size_t iFEMB, const protowibconfigurator::FEMBConf& FEMB_conf, bool continue_on_reg_read_error);
-  void setup_femb(size_t iFEMB, const protowibconfigurator::FEMBConf& FEMB_conf, bool continue_on_reg_read_error);
+  void setup_femb_fake_data(size_t iFEMB, const protowibconfigurator::FEMBSettings& FEMB_conf, bool continue_on_reg_read_error);
+  void setup_femb(size_t iFEMB, const protowibconfigurator::FEMBSettings& FEMB_conf, bool continue_on_reg_read_error);
   
   bool start_links_FELIX_run_start;
   bool stop_links_FELIX_run_stop;

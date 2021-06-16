@@ -28,8 +28,10 @@ ProtoWIBConfigurator::ProtoWIBConfigurator(const std::string& name)
   : dunedaq::appfwk::DAQModule(name)
 {
   register_command("conf", &ProtoWIBConfigurator::do_conf);
+  register_command("settings", &ProtoWIBConfigurator::do_settings);
   register_command("start", &ProtoWIBConfigurator::do_start);
   register_command("stop", &ProtoWIBConfigurator::do_stop);
+  register_command("scrap", &ProtoWIBConfigurator::do_scrap);
 }
 
 void
@@ -41,14 +43,23 @@ void
 ProtoWIBConfigurator::do_conf(const data_t& payload)
 {
   const protowibconfigurator::WIBConf &conf = payload.get<protowibconfigurator::WIBConf>();
+
+  TLOG_DEBUG(0) << "ProtoWIBConfigurator " << get_name() << " is " << conf.wib_addr;
+  
+  wib = std::make_unique<WIB>( conf.wib_addr, conf.wib_table, conf.femb_table );
+  
+  TLOG_DEBUG(0) << get_name() << " successfully initialized";
+}
+  
+void
+ProtoWIBConfigurator::do_settings(const data_t& payload)
+{
+  const protowibconfigurator::WIBSettings &conf = payload.get<protowibconfigurator::WIBSettings>();
   
   if(conf.partition_number > 15)
   {
     throw InvalidPartitionNumber(ERS_HERE, get_name(), conf.partition_number);
   }
-
-  TLOG_DEBUG(0) << "Connecting to WIB at " << conf.wib_addr;
-  wib = std::make_unique<WIB>( conf.wib_addr, conf.wib_table, conf.femb_table );
 
   // Set DIM do-not-disturb
   wib->Write("SYSTEM.SLOW_CONTROL_DND", 1);
@@ -169,7 +180,7 @@ ProtoWIBConfigurator::do_conf(const data_t& payload)
   // Configure FEMBs
   for (size_t iFEMB = 1; iFEMB <= 4; iFEMB++)
   {
-    const protowibconfigurator::FEMBConf &FEMB_conf = femb_conf_i(conf, iFEMB-1);
+    const protowibconfigurator::FEMBSettings &FEMB_conf = femb_conf_i(conf, iFEMB-1);
     if (FEMB_conf.enabled)
     {
 
@@ -203,7 +214,7 @@ ProtoWIBConfigurator::do_conf(const data_t& payload)
   TLOG_DEBUG(0) << "Configured WIB";
 }
 
-void ProtoWIBConfigurator::setup_femb_fake_data(size_t iFEMB, const protowibconfigurator::FEMBConf& FEMB_conf, bool continue_on_reg_read_error) {
+void ProtoWIBConfigurator::setup_femb_fake_data(size_t iFEMB, const protowibconfigurator::FEMBSettings& FEMB_conf, bool continue_on_reg_read_error) {
   wib->FEMBPower(iFEMB, 1);
   sleep(5);
 
@@ -273,7 +284,7 @@ void ProtoWIBConfigurator::setup_femb_fake_data(size_t iFEMB, const protowibconf
   wib->ConfigFEMBFakeData(iFEMB, fake_mode, fake_word, femb_number, fake_waveform);
 }
 
-void ProtoWIBConfigurator::setup_femb(size_t iFEMB, const protowibconfigurator::FEMBConf& FEMB_conf, bool continue_on_reg_read_error){
+void ProtoWIBConfigurator::setup_femb(size_t iFEMB, const protowibconfigurator::FEMBSettings& FEMB_conf, bool continue_on_reg_read_error){
   if (FEMB_conf.gain > 3)
   {
     std::stringstream excpt;
@@ -557,6 +568,14 @@ ProtoWIBConfigurator::do_stop(const data_t&)
     }
   } // if felix
 }
+
+void
+ProtoWIBConfigurator::do_scrap(const data_t&)
+{
+  wib = NULL;
+  TLOG_DEBUG(0) << get_name() << " successfully scrapped";
+}
+
 
 
 } // namespace wibmod

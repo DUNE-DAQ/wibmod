@@ -12,9 +12,9 @@ applications (modules) can receive.
 
 ### Generate a WIB application
 
-To build metadata for a single WIB named `BLAND` with IP `192.168.1.4`:
+To build metadata for a single WIB(2) named `BLAND` with IP `192.168.1.4`:
 ```
-python -m wibmod.wibapp.toplevel wibapp -w BLAND tcp://192.168.1.4:1234
+python -m wibmod.wibapp wibapp -w BLAND tcp://192.168.1.4:1234
 ```
 This will store the metadata in the folder `wibapp`. To include more WIBs,
 include additional `-w [NAME] [ENDPOINT]` arguments. Where the `[NAME]` should
@@ -23,28 +23,33 @@ by `wib` e.g. `wibBLAND`) and the `[ENDPOINT]` is the ZMQ socket the WIB's
 [`wib_server`](https://github.com/DUNE-DAQ/dune-wib-firmware/tree/master/sw) is 
 listening on. 
 
+WIB1 are also supported with the `-p [NAME] [IP]` argument.
+
 ### Running with nanorc
 
 The `wibapp` metadata can be launched using nanorc:
 ```
-nanorc/nanorc.py wibapp
+python -m nanorc wibapp
 ```
 The interactive run control can be used to send the `boot` command, to launch
 the WIB application. Follow this with `init` to start the WIB modules. 
 
 Assuming the WIB(s) are powered and ready to receive configurations, send `conf`
-to load the default configuration. In a pinch, one can edit `wibapp/data/wibapp_conf.json`
-by hand to change the configuration that is sent. A real WIB will now be 
-streaming data out over its fibers from all FEMBs.
+to connect to the WIBs. Sending configuration settings to the WIBs requires 
+sending a `settings` command, which `nanorc` does not currently support. A real
+WIB would then be streaming data out over its fibers from all FEMBs.
 
-NOTE: the `nanorc` does not allow `conf` to be sent multiple times. `quit` and 
-start a fresh session to send another configuration.
+To change settings sent to the WIBs, one can edit `wibapp/data/wibapp_conf.json` 
+by hand to. In the future, some run control database will presumably build this
+configuration information based on the desired detector state.
 
 ## TODOs
 
 The `WIBConfigurator` module includes all the functionality of the `WIB2Reader`
 developed for `artDAQ` except the ability to perform data readout using the WIB
 spy buffer. This functionality is a simplest-working-solution to WIB control.
+`ProtoWIBConfigurator` is an similarly an exact duplicate of the artDAQ 
+functionality, and the `WIB` library developed by BU is included in this repo.
 
 What follows is an (incomplete) list of potential improvements for a more
 complete DAQ system.
@@ -62,16 +67,16 @@ which communicate directly with the `wib_server`.
 ### Run configuration
 
 Presumably the DAQ will want to change WIB/FEMB settings. `WIBConfigurator` 
-implements the `conf` command, which exposes 
+implements the `settings` command, which exposes 
 [all settings](schema/wibmod/wibconfigurator.jsonnet). 
-Will `conf` be called after a `stop`? If that's possible `WIBConfigurator` is 
-good to go, otherwise additional commands will be needed.
+Something in the DAQ needs to invoke this command with the desired arguments
+when WIB settings need to be programmed.
 
 ### Calibration
 
 `WIBConfigurator` may need a `calibrate` command to meet the calibration needs 
 of the DAQ, whatever they end up being. In principle, DAQ can already turn the 
-pulser on and off by sending `conf` commands with appropriate settings.
+pulser on and off by sending `settings` commands with appropriate settings.
 
 ### Monitoring
 
@@ -82,14 +87,15 @@ updates, if this is the route slow controls ends up going.
 
 `wib_server` has several version check commands (hardware and software) as well
 as timing endpoint lock status, etc., which could be checked by `WIBConfigurator`
-but is currently ignored. 
+but is currently ignored. `ProtoWIBConfigurator` includes WIB and FEMB firmware
+checks.
 
 ### Integration into larger DAQ system
 
-The stand-alone WIB app is a good starting place and testing squite. Eventually
+The stand-alone WIB app is a good starting place and testing. Eventually
 the run control or [minidaqapp](https://github.com/DUNE-DAQ/minidaqapp) may 
-want to include `WIBConfigurator` modules to add WIB control to some larger 
-system. 
+want to include (`Proto`)`WIBConfigurator` modules to add WIB control to some
+larger system. 
 
 ## Stateful vs stateless
 
