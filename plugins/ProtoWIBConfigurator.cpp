@@ -49,6 +49,8 @@ ProtoWIBConfigurator::do_conf(const data_t& payload)
   wib = std::make_unique<WIB>( conf.wib_addr, conf.wib_table, conf.femb_table );
   
   TLOG_DEBUG(0) << get_name() << " successfully initialized";
+  
+  do_settings(conf.settings);
 }
   
 void

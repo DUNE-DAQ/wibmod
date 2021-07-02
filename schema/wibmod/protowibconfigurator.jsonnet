@@ -122,7 +122,10 @@ local types = {
         s.field("wib_table", self.setting, "WIB.adt",
                 doc="FEMB register map file"),
         s.field("femb_table", self.setting, "PDUNE_FEMB_323.adt",
-                doc="FEMB register map file")
+                doc="FEMB register map file"),
+                
+        s.field("settings", self.settings,
+                doc="The initial settings applied without an explicit settings command")
                 
     ], doc="ProtoWIB module settings (argument to conf)")
 

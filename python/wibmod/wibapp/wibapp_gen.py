@@ -88,18 +88,30 @@ def generate(
 
     cmd_data['conf'] = acmd([
         (f'wib{nickname}', wibcfg.WIBConf(
-          wib_addr = endpoint
-        ))
+          wib_addr = endpoint,
+          settings = wibcfg.WIBSettings( # Presumably a _real app_ would set non-default settings
+            femb0 = wibcfg.FEMBSettings(),
+            femb1 = wibcfg.FEMBSettings(),
+            femb2 = wibcfg.FEMBSettings(),
+            femb3 = wibcfg.FEMBSettings()
+          ))
+        )
         for nickname,endpoint in WIBSERVERS.items()
     ]+[
-        (f'protowib{nickname}', wibcfg.WIBConf(
-          wib_addr = ip
-        ))
+        (f'protowib{nickname}', protowibcfg.WIBConf(
+          wib_addr = ip,
+          settings = protowibcfg.WIBSettings( # Presumably a _real app_ would set non-default settings
+            femb0 = protowibcfg.FEMBSettings(),
+            femb1 = protowibcfg.FEMBSettings(),
+            femb2 = protowibcfg.FEMBSettings(),
+            femb3 = protowibcfg.FEMBSettings()
+          ))
+        )
         for nickname,ip in PROTOWIBS.items()
     ])
 
-    cmd_data['settings'] = acmd([
-        (f'wib{nickname}', wibcfg.WIBSettings(
+    cmd_data['settings'] = acmd([ 
+        (f'wib{nickname}', wibcfg.WIBSettings( # Presumably a _real app_ would pull settings from some database
           femb0 = wibcfg.FEMBSettings(),
           femb1 = wibcfg.FEMBSettings(),
           femb2 = wibcfg.FEMBSettings(),
@@ -107,7 +119,7 @@ def generate(
         ))
         for nickname in WIBSERVERS
     ]+[
-        (f'protowib{nickname}', protowibcfg.WIBSettings(
+        (f'protowib{nickname}', protowibcfg.WIBSettings( # Presumably a _real app_ would pull settings from some database
           femb1 = protowibcfg.FEMBSettings(),
           femb2 = protowibcfg.FEMBSettings(),
           femb3 = protowibcfg.FEMBSettings(),

@@ -11,7 +11,7 @@ local types = {
     
     bool : s.number("Bool", "u4", doc="1/0 for enable/disabled or true/false"),
 
-    femb_configure: s.record("FEMBSettings", [
+    femb_settings: s.record("FEMBSettings", [
     
         s.field("enabled", self.bool, 1,
                 doc="True of FEMB should be configured and read out by WIB"),
@@ -45,7 +45,7 @@ local types = {
                 
     ], doc="FEMB channel settings"),
 
-    configure: s.record("WIBSettings", [
+    settings: s.record("WIBSettings", [
   
         s.field("cold", self.bool, 0,
                 doc="True if the front end electronics are COLD (77k)"),
@@ -54,17 +54,20 @@ local types = {
         s.field("adc_test_pattern", self.bool, 0,
                 doc="True if the COLDADC test pattern should be enabled"),
                 
-        s.field("femb0", self.femb_configure, doc="Settings for FEMB in slot 0"),
-        s.field("femb1", self.femb_configure, doc="Settings for FEMB in slot 1"),
-        s.field("femb2", self.femb_configure, doc="Settings for FEMB in slot 2"),
-        s.field("femb3", self.femb_configure, doc="Settings for FEMB in slot 3")
+        s.field("femb0", self.femb_settings, doc="Settings for FEMB in slot 0"),
+        s.field("femb1", self.femb_settings, doc="Settings for FEMB in slot 1"),
+        s.field("femb2", self.femb_settings, doc="Settings for FEMB in slot 2"),
+        s.field("femb3", self.femb_settings, doc="Settings for FEMB in slot 3")
         
     ], doc="WIB system settings (argument to settings)"),
     
     conf: s.record("WIBConf", [
     
         s.field("wib_addr", self.zmqaddr, "tcp://192.168.121.1:1234",
-                doc="The ZeroMQ network address for the WIB to interact with")
+                doc="The ZeroMQ network address for the WIB to interact with"),
+                
+        s.field("settings", self.settings,
+                doc="The initial settings applied without an explicit settings command")
                 
     ], doc="WIB module settings (argument to conf)")
 

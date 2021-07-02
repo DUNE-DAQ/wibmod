@@ -88,6 +88,8 @@ WIBConfigurator::do_conf(const data_t& payload)
   wib = std::unique_ptr<WIBCommon>(new WIBCommon(conf.wib_addr));
 
   TLOG_DEBUG(0) << get_name() << " successfully initialized";
+  
+  do_settings(conf.settings);
 }
 
 void

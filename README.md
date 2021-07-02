@@ -35,12 +35,13 @@ The interactive run control can be used to send the `boot` command, to launch
 the WIB application. Follow this with `init` to start the WIB modules. 
 
 Assuming the WIB(s) are powered and ready to receive configurations, send `conf`
-to connect to the WIBs. Sending configuration settings to the WIBs requires 
-sending a `settings` command, which `nanorc` does not currently support. A real
-WIB would then be streaming data out over its fibers from all FEMBs.
+to connect to the WIBs and load the initial settings. Sending additional 
+settings to the WIBs requires sending a `settings` command, which `nanorc` does 
+not currently support. A real WIB will now be streaming data out over its fibers
+from all FEMBs.
 
 To change settings sent to the WIBs, one can edit `wibapp/data/wibapp_conf.json` 
-by hand to. In the future, some run control database will presumably build this
+by hand. In the future, some run control database will presumably build this
 configuration information based on the desired detector state.
 
 ## TODOs
@@ -56,13 +57,13 @@ complete DAQ system.
 
 ### Power control
 
-How will DAQ (slow controls?) turn WIBs off and on? Could implement a `power`
-command in `WIBConfigurator` to send `WIBPower` messages to the `wib_server`, if
-this is how DAQ envisions this happening.
+Slow controls will control FEMB power via an [OPC UA](https://documentation.unified-automation.com/uasdkcpp/1.7.4/html/index.html) 
+server that has yet to be implemented. 
 
 For ICEBERG and artDAQ, power control was a set of 
 [external utilities](https://github.com/DUNE-DAQ/dune-wib-firmware/tree/master/sw)
-which communicate directly with the `wib_server`.
+which communicate directly with the `wib_server`. It is probably best to use
+these utilities for now, and for debugging.
 
 ### Run configuration
 
