@@ -39,6 +39,23 @@ ProtoWIBConfigurator::init(const data_t&)
 {
 }
 
+const protowibconfigurator::FEMBSettings & 
+ProtoWIBConfigurator::femb_conf_i(const protowibconfigurator::WIBSettings &conf, size_t i)
+{
+  switch(i) {
+    case 1:
+      return conf.femb1;
+    case 2:
+      return conf.femb2;
+    case 3:
+      return conf.femb3;
+    case 4:
+      return conf.femb4;
+    default:
+      throw UnreachableError(ERS_HERE, get_name());
+  }
+}
+
 void
 ProtoWIBConfigurator::do_conf(const data_t& payload)
 {
@@ -169,20 +186,20 @@ ProtoWIBConfigurator::do_settings(const data_t& payload)
   // Configure WIB fake data enable and mode
   TLOG_DEBUG(0) << "Configuring WIB Fake Data";
   TLOG_DEBUG(0) << "Is Fake:"
-                << " FEMB1: " << femb_conf_i(conf, 0).enable_wib_fake_data
-                << " FEMB2: " << femb_conf_i(conf, 1).enable_wib_fake_data
-                << " FEMB3: " << femb_conf_i(conf, 2).enable_wib_fake_data
-                << " FEMB4: " << femb_conf_i(conf, 3).enable_wib_fake_data;
-  wib->ConfigWIBFakeData(femb_conf_i(conf, 0).enable_wib_fake_data, 
-                         femb_conf_i(conf, 1).enable_wib_fake_data, 
+                << " FEMB1: " << femb_conf_i(conf, 1).enable_wib_fake_data
+                << " FEMB2: " << femb_conf_i(conf, 2).enable_wib_fake_data
+                << " FEMB3: " << femb_conf_i(conf, 3).enable_wib_fake_data
+                << " FEMB4: " << femb_conf_i(conf, 4).enable_wib_fake_data;
+  wib->ConfigWIBFakeData(femb_conf_i(conf, 1).enable_wib_fake_data, 
                          femb_conf_i(conf, 2).enable_wib_fake_data, 
                          femb_conf_i(conf, 3).enable_wib_fake_data, 
+                         femb_conf_i(conf, 4).enable_wib_fake_data, 
                          conf.use_wib_fake_data_counter);
   
   // Configure FEMBs
   for (size_t iFEMB = 1; iFEMB <= 4; iFEMB++)
   {
-    const protowibconfigurator::FEMBSettings &FEMB_conf = femb_conf_i(conf, iFEMB-1);
+    const protowibconfigurator::FEMBSettings &FEMB_conf = femb_conf_i(conf, iFEMB);
     if (FEMB_conf.enabled)
     {
 
