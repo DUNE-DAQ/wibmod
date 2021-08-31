@@ -43,7 +43,8 @@ def generate_boot( wibapp_spec: dict) -> dict:
                 'DUNEDAQ_SHARE_PATH': 'getenv',
                 'LD_LIBRARY_PATH': 'getenv',
                 'PATH': 'getenv',
-                'DUNEDAQ_ERS_DEBUG_LEVEL': '1'
+                'DUNEDAQ_ERS_DEBUG_LEVEL': '1',
+                'WIBMOD_SHARE': 'getenv'
             },
             'cmd': [
                 'CMD_FAC=rest://localhost:${APP_PORT}',

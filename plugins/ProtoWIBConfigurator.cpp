@@ -66,7 +66,7 @@ ProtoWIBConfigurator::do_conf(const data_t& payload)
   try {
     wib = std::make_unique<WIB>( conf.wib_addr, conf.wib_table, conf.femb_table );
   } catch (BUException::exBase &exc) {
-      std::cout << "FAILED TO CREATE WIB: " <<exc.Description() << std::endl;
+      throw UnhandledBUException(ERS_HERE, get_name(), exc.what(), exc.Description());
   }
   
   TLOG_DEBUG(0) << get_name() << " successfully initialized";
