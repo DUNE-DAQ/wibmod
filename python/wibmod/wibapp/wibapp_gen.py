@@ -1,4 +1,4 @@
-# Set moo schema search path
+/f# Set moo schema search path
 from dunedaq.env import get_moo_model_path
 import moo.io
 moo.io.default_load_path = get_moo_model_path()
@@ -101,10 +101,10 @@ def generate(
         (f'protowib{nickname}', protowibcfg.WIBConf(
           wib_addr = ip,
           settings = protowibcfg.WIBSettings( # Presumably a _real app_ would set non-default settings
-            femb0 = protowibcfg.FEMBSettings(),
             femb1 = protowibcfg.FEMBSettings(),
             femb2 = protowibcfg.FEMBSettings(),
-            femb3 = protowibcfg.FEMBSettings()
+            femb3 = protowibcfg.FEMBSettings(),
+            femb4 = protowibcfg.FEMBSettings()
           ))
         )
         for nickname,ip in PROTOWIBS.items()
