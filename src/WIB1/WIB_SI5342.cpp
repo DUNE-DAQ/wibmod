@@ -43,7 +43,7 @@ void WIB::LoadConfigDAQ_SI5342(std::string const & fileName){
     //Try the default
     if(getenv("WIBMOD_SHARE") != NULL){      
       std::string envBasedFileName=getenv("WIBMOD_SHARE");
-      envBasedFileName+="/scripts/WIB1/config/";
+      envBasedFileName+="/config/WIB1/config/";
       envBasedFileName+=SI5342_CONFIG_FILENAME;
       confFile.open(envBasedFileName.c_str());
       if(confFile.fail()){

@@ -63,7 +63,11 @@ ProtoWIBConfigurator::do_conf(const data_t& payload)
 
   TLOG_DEBUG(0) << "ProtoWIBConfigurator " << get_name() << " is " << conf.wib_addr;
   
-  wib = std::make_unique<WIB>( conf.wib_addr, conf.wib_table, conf.femb_table );
+  try {
+    wib = std::make_unique<WIB>( conf.wib_addr, conf.wib_table, conf.femb_table );
+  } catch (BUException::exBase &exc) {
+      throw UnhandledBUException(ERS_HERE, get_name(), exc.what(), exc.Description());
+  }
   
   TLOG_DEBUG(0) << get_name() << " successfully initialized";
   

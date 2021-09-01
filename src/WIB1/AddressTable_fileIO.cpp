@@ -18,7 +18,7 @@ void AddressTable::LoadFile(std::string const & fileName,
     //Try to use address table path if it exists
     if(getenv("WIBMOD_SHARE") != NULL){      
       envBasedFileName=getenv("WIBMOD_SHARE");
-      envBasedFileName+="/scripts/WIB1/tables/";
+      envBasedFileName+="/config/WIB1/tables/";
       envBasedFileName+=fileName;
       inFile.open(envBasedFileName.c_str());
     }    
