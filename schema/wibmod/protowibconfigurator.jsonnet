@@ -19,15 +19,15 @@ local types = {
 
     femb_settings: s.record("FEMBSettings", [
     
-        s.field("enabled", self.bool, 1,
+        s.field("enabled", self.bool, 0,
                 doc="True of FEMB should be configured and read out by WIB"),
         
         #crying shame that jsonnet doesn't support hex literals
         s.field("expected_femb_fw_version", self.value, 803,
                 doc="This must match the FEMB firmware version"),
-        s.field("enable_wib_fake_data", self.bool, 0, 
+        s.field("enable_wib_fake_data", self.bool, 1, 
                 doc="If true, enables WIB fake data mode, and ignores all data from this FEMB"), 
-        s.field("enable_femb_fake_data", self.bool, 0, 
+        s.field("enable_femb_fake_data", self.bool, 1, 
                 doc="If true, enables FEMB fake data mode, else real data"), 
         s.field("fake_data_select", self.setting, "fake_word",
                 doc="Select the fake data type: fake_word, fake_waveform, femb_channel_id, or counter_channel_id"),
@@ -71,7 +71,7 @@ local types = {
     settings: s.record("WIBSettings", [
     
         #crying shame that jsonnet doesn't support hex literals
-        s.field("expected_wib_fw_version", self.value, 403121409,
+        s.field("expected_wib_fw_version", self.value, 403252737,
                 doc="This must match the WIB firmware version"),
         s.field("expected_daq_mode", self.setting, "any",
                 doc="This must match the WIB firmware version: any, RCE, FELIX"),
