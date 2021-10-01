@@ -25,7 +25,7 @@ local types = {
         #crying shame that jsonnet doesn't support hex literals
         s.field("expected_femb_fw_version", self.value, 803,
                 doc="This must match the FEMB firmware version"),
-        s.field("enable_wib_fake_data", self.bool, 1, 
+        s.field("enable_wib_fake_data", self.bool, 0, 
                 doc="If true, enables WIB fake data mode, and ignores all data from this FEMB"), 
         s.field("enable_femb_fake_data", self.bool, 1, 
                 doc="If true, enables FEMB fake data mode, else real data"), 
@@ -41,7 +41,7 @@ local types = {
                 doc="FE shaping time select: 0 (0.5 us), 1 (1 us), 2 (2 us), 3 (3 us)"),
         s.field("baseline_high", self.option, 2,
                 doc="FE baseline select: 0 (200 mV), 1 (900 mV), 2 (200 mV for collection and 900 mV for induction channels)"),
-        s.field("leak_high", self.option, 2,
+        s.field("leak_high", self.option, 0,
                 doc="1 for 500 pA FE leakage current, 0 for 100 pA (don't need to change)"),
         s.field("leak_10x", self.bool, 0,
                 doc="1 for 10x FE leakage current, 0 for 1x"),

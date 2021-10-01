@@ -9,13 +9,15 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 console = Console()
 
-def generate_boot( wibapp_spec: dict) -> dict:
+def generate_boot( wibapp: list, host) -> dict:
     '''
     Generates boot informations
 
-    :param      wibapp_spec:  The wibapp specifications
-    :type       wibapp_spec:  dict
+    :param      wibapp:  The wib apps
+    :type       wibapp:  list
 
+    :param      host: host to run the wib control applications
+    :type       host: string
     :returns:   { description_of_the_return_value }
     :rtype:     dict
     '''
@@ -55,25 +57,30 @@ def generate_boot( wibapp_spec: dict) -> dict:
         }
     }
 
+
     boot = {
         'env': {
             'DUNEDAQ_ERS_VERBOSITY_LEVEL': 1
         },
         'apps': {
-            wibapp_spec['name']: {
-                'exec': 'daq_application',
-                'host': 'host_wibapp',
-                'port': wibapp_spec['port']
-            }
         },
         'hosts': {
-            'host_wibapp': wibapp_spec['host']
+            'host_wibapp': host
         },
         'response_listener': {
             'port': 56789
         },
         'exec': daq_app_specs
     }
+
+    port_offset = 3380
+    for appname in wibapp:
+        boot['apps'][appname] = {
+                   'exec': 'daq_application',
+                   'host': 'host_wibapp',
+                   'port': port_offset
+                }
+        port_offset = port_offset + 1
 
     console.log('Boot data')
     console.log(boot)
@@ -85,23 +92,24 @@ import click
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.option('-w', '--wibserver', nargs=2, multiple=True) # e.g. -w TESTSTAND tcp://192.168.121.1:1234
 @click.option('-p', '--protowib', nargs=2, multiple=True) # e.g. -p TESTSTAND 192.168.121.1
+@click.option('--host_wib_sw', default='localhost')
 @click.argument('json_dir', type=click.Path())
-def cli(wibserver, protowib, json_dir):
+def cli(wibserver, protowib, host_wib_sw, json_dir):
     '''
       JSON_DIR: Json file output folder
     '''
     console.log('Loading wibapp config generator')
     from . import wibapp_gen
+
     
     print(wibserver,protowib)
     wibservers = {k:v for k,v in wibserver}
     protowibs = {k:v for k,v in protowib}
     
+
     console.log(f'Generating configs')
-    cmd_data = wibapp_gen.generate(
-        WIBSERVERS=wibservers,
-        PROTOWIBS=protowibs
-    )
+    cmd_data = [wibapp_gen.generate(k, v, 1) for k,v in protowibs.items()]
+    cmd_data.extend([wibapp_gen.generate(k, v, 2) for k,v in wibservers.items()])
 
     console.log('wibapp cmd data:', cmd_data)
 
@@ -111,12 +119,14 @@ def cli(wibserver, protowib, json_dir):
     data_dir = join(json_dir, 'data')
     os.makedirs(data_dir)
 
-    app_wibapp='wibapp'
+    app_wibapp=[f"ctrl_{wibname}" for wibname in protowibs]
+    app_wibapp.extend([f"ctrl_{wibname}" for wibname in wibservers])
 
-    jf_wibapp = join(data_dir, app_wibapp)
+    jf_wibapp = [join(data_dir, app_wibapp[idx]) for idx in range(len(app_wibapp))]
 
     cmd_set = ['init', 'conf', 'settings', 'start', 'pause', 'resume', 'stop', 'scrap']
-    for app,data in ((app_wibapp, cmd_data),):
+
+    for app,data in zip(app_wibapp, cmd_data):
         console.log(f'Generating {app} command data json files')
         for c in cmd_set:
             with open(f'{join(data_dir, app)}_{c}.json', 'w') as f:
@@ -124,29 +134,22 @@ def cli(wibserver, protowib, json_dir):
 
 
     console.log(f'Generating top-level command json files')
-    start_order = [app_wibapp]
+    #start_order = [app_wibapp]
     for c in cmd_set:
         with open(join(json_dir,f'{c}.json'), 'w') as f:
             cfg = {
-                'apps': { app: f'data/{app}_{c}' for app in (app_wibapp, ) }
+                'apps': { app: f'data/{app}_{c}' for app in app_wibapp }
             }
-            if c == 'start':
-                cfg['order'] = start_order
-            elif c == 'stop':
-                cfg['order'] = start_order[::-1]
+            if c in ('resume', 'pause'):
+               for wapp in app_wibapp:
+                  del cfg['apps'][wapp]
 
             json.dump(cfg, f, indent=4, sort_keys=True)
 
 
     console.log(f'Generating boot json file')
     with open(join(json_dir,'boot.json'), 'w') as f:
-        cfg = generate_boot(
-            wibapp_spec = {
-                'name': app_wibapp,
-                'host': 'localhost',
-                'port': 3333
-            },
-        )
+        cfg = generate_boot(app_wibapp, host_wib_sw)
         json.dump(cfg, f, indent=4, sort_keys=True)
     console.log(f'MDAapp config generated in {json_dir}')
 
