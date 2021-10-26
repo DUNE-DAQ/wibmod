@@ -60,9 +60,6 @@ private:
   
   void setup_femb_fake_data(size_t iFEMB, const protowibconfigurator::FEMBSettings& FEMB_conf, bool continue_on_reg_read_error);
   void setup_femb(size_t iFEMB, const protowibconfigurator::FEMBSettings& FEMB_conf, bool continue_on_reg_read_error);
-  
-  bool start_links_FELIX_run_start;
-  bool stop_links_FELIX_run_stop;
 
 };
 

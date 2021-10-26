@@ -408,7 +408,7 @@ void WIB::CheckedResetWIBAndCfgDTS(uint8_t localClock, uint8_t PDTS_TGRP, uint8_
 
 }
 
-void WIB::StartStreamToDAQ(){
+void WIB::StartStreamToDAQ(bool link1_enabled, bool link2_enabled, bool link3_enabled, bool link4_enabled ){
   if(DAQMode == UNKNOWN){
     BUException::WIB_DAQMODE_UNKNOWN e;
     throw e;    
@@ -428,12 +428,13 @@ void WIB::StartStreamToDAQ(){
   sleep(1);
 
   // Enable DAQ links
-  size_t nLinks = 4;
   if (DAQMode == FELIX){
-    nLinks = 2;
+    if(link1_enabled) EnableDAQLink_Lite(1,1);
+    if(link2_enabled) EnableDAQLink_Lite(2,1);
   }
-  for (size_t iLink=1; iLink <= nLinks; iLink++){
-    EnableDAQLink_Lite(iLink,1);
+  else {
+    if(link3_enabled) EnableDAQLink_Lite(3,1);
+    if(link4_enabled) EnableDAQLink_Lite(4,1);
   }
 
   // Enable the FEMB to align to idle and wait for convert

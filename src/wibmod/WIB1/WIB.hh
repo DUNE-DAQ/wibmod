@@ -41,7 +41,7 @@ class WIB: public WIBBase {
   void StartSyncDTS();
   void ResetWIBAndCfgDTS(uint8_t localClock,uint8_t PDTS_TGRP, uint8_t PDTSsource = 0, uint32_t PDTSAlignment_timeout = 0);
   void CheckedResetWIBAndCfgDTS(uint8_t localClock,uint8_t PDTS_TGRP, uint8_t PDTSsource = 0, uint32_t PDTSAlignment_timeout = 0);
-  void StartStreamToDAQ();
+  void StartStreamToDAQ(bool l1=true, bool l2=true, bool l3=false, bool l4=false);
   void PDTSInRunningState();
 
   void EnableFEMBCNC();

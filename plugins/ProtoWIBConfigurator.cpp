@@ -224,12 +224,12 @@ ProtoWIBConfigurator::do_settings(const data_t& payload)
     }
   }
 
-  if (!((daqMode == WIB::FELIX) && conf.start_felix_links_at_run_start))
-  {
+  //if (!((daqMode == WIB::FELIX) && conf.start_felix_links_at_run_start))
+  //{
     // don't enable links yet if FELIX and start_links_FELIX, do it in start
-    TLOG_DEBUG(0) << "Enabling DAQ links";
-    wib->StartStreamToDAQ();
-  }
+  TLOG_DEBUG(0) << "Enabling DAQ links " << conf.link1_enabled << " " << conf.link2_enabled << " " << conf.link3_enabled << " " << conf.link4_enabled;
+  wib->StartStreamToDAQ(conf.link1_enabled, conf.link2_enabled, conf.link3_enabled, conf.link4_enabled);
+  //}
   
   // Un-set DIM do-not-disturb
   wib->Write("SYSTEM.SLOW_CONTROL_DND", 0);
@@ -470,6 +470,7 @@ void ProtoWIBConfigurator::setup_femb(size_t iFEMB, const protowibconfigurator::
 void
 ProtoWIBConfigurator::do_start(const data_t&)
 {
+/*
   if (!wib) 
   {
     throw CommandFailed(ERS_HERE, get_name(), "WIB object pointer NULL");
@@ -526,16 +527,21 @@ ProtoWIBConfigurator::do_start(const data_t&)
                           std::to_string(start_run_tries) + " tries");
     }
   } // if felix
+*/
 }
 
 void
 ProtoWIBConfigurator::do_stop(const data_t&)
+{}
+
+void
+ProtoWIBConfigurator::do_scrap(const data_t&)
 {
   if (!wib) 
   {
     throw CommandFailed(ERS_HERE, get_name(), "WIB object pointer NULL");
   }
-  if (wib->GetDAQMode() == WIB::FELIX && stop_links_FELIX_run_stop)
+  if (wib->GetDAQMode() == WIB::FELIX)
   {
     TLOG_DEBUG(0) << "Disabling DAQ links";
 
@@ -571,7 +577,7 @@ ProtoWIBConfigurator::do_stop(const data_t&)
 
         throw UnhandledBUException(ERS_HERE, get_name(), exc.what(), exc.Description());
       }
-      TLOG_DEBUG(0) << "Run stop try  " << iTry << " failed. Trying again...";
+      TLOG_DEBUG(0) << "Attempt to stop data transition  " << iTry << " failed. Trying again...";
     } // for iRetry
 
     // Try to un-set DIM do-not-disturb no matter what happened
@@ -586,20 +592,13 @@ ProtoWIBConfigurator::do_stop(const data_t&)
 
     if (!success)
     {
-      throw CommandFailed(ERS_HERE, get_name(), "Failed to stop run after " + 
-                          std::to_string(stop_run_tries) + " tries");
+      ers::warning(CommandFailed(ERS_HERE, get_name(), "Failed to stop data transmission after " + 
+                          std::to_string(stop_run_tries) + " tries"));
     }
   } // if felix
-}
-
-void
-ProtoWIBConfigurator::do_scrap(const data_t&)
-{
   wib = NULL;
   TLOG_DEBUG(0) << get_name() << " successfully scrapped";
 }
-
-
 
 } // namespace wibmod
 } // namespace dunedaq

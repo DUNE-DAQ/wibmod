@@ -19,7 +19,7 @@ local types = {
 
     femb_settings: s.record("FEMBSettings", [
     
-        s.field("enabled", self.bool, 0,
+        s.field("enabled", self.bool, 1,
                 doc="True of FEMB should be configured and read out by WIB"),
         
         #crying shame that jsonnet doesn't support hex literals
@@ -27,7 +27,7 @@ local types = {
                 doc="This must match the FEMB firmware version"),
         s.field("enable_wib_fake_data", self.bool, 0, 
                 doc="If true, enables WIB fake data mode, and ignores all data from this FEMB"), 
-        s.field("enable_femb_fake_data", self.bool, 1, 
+        s.field("enable_femb_fake_data", self.bool, 0, 
                 doc="If true, enables FEMB fake data mode, else real data"), 
         s.field("fake_data_select", self.setting, "fake_word",
                 doc="Select the fake data type: fake_word, fake_waveform, femb_channel_id, or counter_channel_id"),
@@ -75,7 +75,10 @@ local types = {
                 doc="This must match the WIB firmware version"),
         s.field("expected_daq_mode", self.setting, "any",
                 doc="This must match the WIB firmware version: any, RCE, FELIX"),
-                
+        s.field("link1_enabled", self.bool, 1, doc="True if link is active"),        
+        s.field("link2_enabled", self.bool, 1, doc="True if link is active"),        
+        s.field("link3_enabled", self.bool, 0, doc="True if link is active"),        
+        s.field("link4_enabled", self.bool, 0, doc="True if link is active"),        
         #no idea what this does, copied straight from artDAQ
         s.field("use_wib_fake_data_counter", self.bool, 0,
                 doc="if false, put a counters in the DAQ data frame, if true just transmit a raw counter"),
@@ -107,11 +110,6 @@ local types = {
                 doc="Time to wait after setting do-not-disturb (seconds)"),
         s.field("configuration_tries", self.value, 10,
                 doc="Number of times to try configuring before giving up"),
-        s.field("start_felix_links_at_run_start", self.bool, 0,
-                doc="Start FELIX links in start transition, else during configure transition"),
-        s.field("stop_felix_links_at_run_stop", self.bool, 0,
-                doc="Stop FELIX links in stop transition, else don't stop")
-                
     ], doc="ProtoWIB system settings (argument to settings)"),
     
     conf: s.record("WIBConf", [
