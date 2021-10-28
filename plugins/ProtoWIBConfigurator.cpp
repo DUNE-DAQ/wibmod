@@ -199,7 +199,17 @@ ProtoWIBConfigurator::do_settings(const data_t& payload)
                          femb_conf_i(conf, 3).enable_wib_fake_data, 
                          femb_conf_i(conf, 4).enable_wib_fake_data, 
                          conf.use_wib_fake_data_counter);
-  
+ 
+  // GLM: turn on all FEMBs
+  for (size_t iFEMB = 1; iFEMB <= 4; iFEMB++)
+  {
+    const protowibconfigurator::FEMBSettings &FEMB_conf = femb_conf_i(conf, iFEMB);
+    if (FEMB_conf.enabled)
+    {
+      wib->FEMBPower(iFEMB, 1);
+    }
+    sleep(5);
+  }
   // Configure FEMBs
   for (size_t iFEMB = 1; iFEMB <= 4; iFEMB++)
   {
@@ -427,9 +437,9 @@ void ProtoWIBConfigurator::setup_femb(size_t iFEMB, const protowibconfigurator::
   }
 
   ///////////////////////////////////////
-
-  wib->FEMBPower(iFEMB, 1);
-  sleep(5);
+  //GLM: all enabled FEMBs turned on upfront
+  //wib->FEMBPower(iFEMB, 1);
+  //sleep(5);
 
   if (wib->ReadFEMB(iFEMB, "VERSION_ID") == wib->ReadFEMB(iFEMB, "SYS_RESET")) 
   { // can't read register if equal
