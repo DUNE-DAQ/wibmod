@@ -172,7 +172,7 @@ ProtoWIBConfigurator::do_settings(const data_t& payload)
   else
   {
     TLOG_DEBUG(0) << "Running Checked Reset on the WIB";
-    wib->CheckedResetWIBAndCfgDTS(conf.local_clock, conf.partition_number, conf.dts_source);    
+    wib->CheckedResetWIBAndCfgDTS(conf.local_clock, conf.partition_number, conf.dts_source, 1); // GLM: last param =1 means we are going to wait to reach 0x8    
     TLOG_DEBUG(0) << "Finished Checked Reset on the WIB";
     if (daqMode == WIB::FELIX)
     {                                                  
