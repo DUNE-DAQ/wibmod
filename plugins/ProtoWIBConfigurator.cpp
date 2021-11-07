@@ -200,7 +200,7 @@ ProtoWIBConfigurator::do_settings(const data_t& payload)
                          femb_conf_i(conf, 4).enable_wib_fake_data, 
                          conf.use_wib_fake_data_counter);
  
-  // GLM: turn on all FEMBs
+  // GLM: turn on all enabled FEMBs
   for (size_t iFEMB = 1; iFEMB <= 4; iFEMB++)
   {
     const protowibconfigurator::FEMBSettings &FEMB_conf = femb_conf_i(conf, iFEMB);

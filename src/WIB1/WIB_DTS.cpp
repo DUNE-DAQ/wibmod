@@ -1,8 +1,12 @@
 #include "wibmod/WIB1/WIB.hh"
+#include "wibmod/Issues.hpp"
 #include "wibmod/WIB1/WIBException.hh"
+#include "ers/ers.hpp"
+
 #include <unistd.h>
 
 #include <stdio.h>
+#include <chrono>
 
 
 void WIB::InitializeDTS(uint8_t PDTSsource,uint8_t clockSource, uint32_t PDTSAlignment_timeout){
@@ -66,7 +70,7 @@ void WIB::InitializeDTS(uint8_t PDTSsource,uint8_t clockSource, uint32_t PDTSAli
     throw;
   }
   
-  sleep(1);
+  usleep(100000);
     
   //Check that SI5344 is locked on
   if(ReadWithRetry("DTS.SI5344.LOS") ||
@@ -82,12 +86,10 @@ void WIB::InitializeDTS(uint8_t PDTSsource,uint8_t clockSource, uint32_t PDTSAli
     throw e;
   }
 
-  sleep(1);
   //Enable the clock for FPGA
   WriteWithRetry("DTS.SI5344.ENABLE",1);
-  sleep(1);
+  usleep(100000);
 
-  //  char const * const PDTSStates[] = {"W_RST","W_SFP","W_CDR","W_ALIGN","W_FREQ","W_LOCK","W_RDY","0x7","RUN","0x9","0xA","0xB","ERR_R","ERR_T","0xE","0xF"};
   char const * const PDTSStates[] = {"W_RST",
 				     "W_LINK",
 				     "W_FREQ",
@@ -104,105 +106,55 @@ void WIB::InitializeDTS(uint8_t PDTSsource,uint8_t clockSource, uint32_t PDTSAli
 				     "ERR_T",
 				     "ERR_P",
 				     "0xF"};
-  const int number_of_tries = 50;
+
+  
   if(0 == clockSource){
     printf("\nSetup PDTS.\n");
-    for(int tries = 1; tries <= number_of_tries;tries++){
+    bool timeout_exists = true;
+    if (PDTSAlignment_timeout == 0)
+	timeout_exists = false;
+
+    auto start_time = std::chrono::high_resolution_clock::now();
+    bool timed_out = false;
+
+    while ((timeout_exists == false) || timed_out == false) {
       //Using PDTS, set that up.
+      usleep(500000);
       WriteWithRetry("DTS.PDTS_ENABLE",1);
-      usleep(10000); //needed in new PDTS system to get to a good state before giving up and trying a new phase. 
+      usleep(500000); //needed in new PDTS system to get to a good state before giving up and trying a new phase. 
 
       //See if we've locked
       uint32_t pdts_state = ReadWithRetry("DTS.PDTS_STATE");
-      printf("Try % 3d.   PDTS state: %s (0x%01X)\n",tries,PDTSStates[pdts_state&0xF],pdts_state);
-
-      if(0x6 == pdts_state){	
-
-	//We are ready to align!	
-	if(PDTSAlignment_timeout == 0){
-	  //In this mode we exit here to allow the system to wait in 0x6 while we configure the rest of the system. 
-	  //This requires FW 2018-10-09 to allow 0x6 to be a valid locked state.
-	  printf("PDTS state: %s (0x%01X)\n",PDTSStates[pdts_state&0xF],pdts_state);
-	  tries = number_of_tries+1; //break out completely	  
-	}else{
-	  //=======================================================================
-	  //Wait for alignment to finish
-	  bool waitingForAlignment = true;	
-	  while(waitingForAlignment){
-	    
-	    //poll for the state to change
-	    sleep(1);
-	    uint32_t pdts_state = ReadWithRetry("DTS.PDTS_STATE");
-
-
-	    if(0x8 == pdts_state){
-	      printf("PDTS state: %s (0x%01X)\n",PDTSStates[pdts_state&0xF],pdts_state);
-	      waitingForAlignment = false;
-	      tries = number_of_tries+1; //break out completely
-	    }else if((pdts_state < 0x6) || (pdts_state > 0x8)){
-	      //Something went wrong, go back to trying. 
-	      waitingForAlignment = false;
-	      printf("Something went wrong!   PDTS state: %s (0x%01X)\n",PDTSStates[pdts_state&0xF],pdts_state);
-	    
-	      //We haven't locked, kick the SI5344 chip and see what happens
-	      if(tries == number_of_tries){
-		//We are DONE, fail.
-		WriteWithRetry("DTS.PDTS_ENABLE",0);
-		//Throw
-		BUException::WIB_DTS_ERROR e;
-		e.Append("Failed to configure the PDTS correctly\n");
-		throw e;	  
-	      }
-	    
-	      WriteWithRetry("DTS.PDTS_ENABLE",0);
-	    
-	      //dynamic post-amble
-	      Write("DTS.SI5344.I2C.RESET",1);
-	      SetDTS_SI5344Page(0x0);
-	      Write("DTS.SI5344.I2C.RESET",1);
-	      WriteDTS_SI5344(0x1C,0x1,1);
-	      usleep(300000);
-	    	    
-	    }else{
-	      printf("Waiting for phase alignment.   PDTS state: %s (0x%01X)\n",PDTSStates[pdts_state&0xF],pdts_state);	  
-	      //timeout if requested
-	      if(1 == PDTSAlignment_timeout){
-		printf("Timeout in PDTS wait.   PDTS state: %s (0x%01X)\n",PDTSStates[pdts_state&0xF],pdts_state);	  
-		//Throw
-		BUException::WIB_DTS_ERROR e;
-		e.Append("Timeout in the PDTS phase adjustment wait\n");
-		throw e;	  	      
-	      }else if(PDTSAlignment_timeout > 1){
-		PDTSAlignment_timeout--;
-	      }
-	    }
-	  }
-	}
-	//=======================================================================
-      }else{
-	//We haven't locked, kick the SI5344 chip and see what happens
-	if(tries == number_of_tries){
-	  //We are DONE, fail.
-	  WriteWithRetry("DTS.PDTS_ENABLE",0);
-	  //Throw
-	  BUException::WIB_DTS_ERROR e;
-	  e.Append("Failed to configure the PDTS correctly\n");
-	  throw e;	  
-	}
-
-	WriteWithRetry("DTS.PDTS_ENABLE",0);
-
-
-
-	//dynamic post-amble
-        Write("DTS.SI5344.I2C.RESET",1);
-        SetDTS_SI5344Page(0x0);
-        Write("DTS.SI5344.I2C.RESET",1);
-	WriteDTS_SI5344(0x1C,0x1,1);
-	usleep(300000);
+      printf("PDTS state: %s (0x%01X)\n",PDTSStates[pdts_state&0xF],pdts_state);
+      if ((pdts_state < 0x6) || (pdts_state > 0x8)) {
+          WriteWithRetry("DTS.PDTS_ENABLE",0);
+          //dynamic post-amble
+          Write("DTS.SI5344.I2C.RESET",1);
+          SetDTS_SI5344Page(0x0);
+          Write("DTS.SI5344.I2C.RESET",1);
+          WriteDTS_SI5344(0x1C,0x1,1);
       }
+      else if(0x6 == pdts_state || 0x7 == pdts_state){
+          ers::info(dunedaq::wibmod::WaitingForAlignment(ERS_HERE));
+      }
+      else {
+          return; //0x8 == pdts_state
+      }
+      auto now = std::chrono::high_resolution_clock::now();
+      auto duration = now - start_time;
+      if ( duration.count() > PDTSAlignment_timeout)
+          timed_out = true;
     }
-  } 
+    //If we get here something went wrong
+    Write("DTS.SI5344.I2C.RESET",1);
+    SetDTS_SI5344Page(0x0);
+    Write("DTS.SI5344.I2C.RESET",1);
+    WriteDTS_SI5344(0x1C,0x1,1);
+
+    BUException::WIB_DTS_ERROR e;
+    e.Append("Failed to configure the PDTS correctly within timeout\n");
+    throw e; 
+  }
 }
 
 void WIB::StartSyncDTS(){

@@ -116,6 +116,10 @@ ERS_DECLARE_ISSUE_BASE(wibmod,
                        ((std::string)name),
                        ((std::string)message))
 
+ERS_DECLARE_ISSUE(wibmod,
+                       WaitingForAlignment,
+                       "Waiting for alignment constants from PDTS",
+                       ERS_EMPTY)
 } // namespace dunedaq
 
 #endif // WIBMOD_INCLUDE_WIBMOD_ISSUES_HPP_
