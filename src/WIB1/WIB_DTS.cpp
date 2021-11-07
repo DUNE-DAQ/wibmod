@@ -134,8 +134,11 @@ void WIB::InitializeDTS(uint8_t PDTSsource,uint8_t clockSource, uint32_t PDTSAli
           Write("DTS.SI5344.I2C.RESET",1);
           WriteDTS_SI5344(0x1C,0x1,1);
       }
-      else if(0x6 == pdts_state || 0x7 == pdts_state){
+      else if(0x6 == pdts_state){
           ers::info(dunedaq::wibmod::WaitingForAlignment(ERS_HERE));
+      }
+      else if(0x7 == pdts_state){
+          ers::info(dunedaq::wibmod::WaitingForTimestamp(ERS_HERE));
       }
       else {
           return; //0x8 == pdts_state
