@@ -6,6 +6,8 @@ include(CMakeFindDependencyMacro)
 find_dependency(ers)
 find_dependency(logging)
 find_dependency(appfwk)
+find_dependency(cppzmq)
+find_dependency(Protobuf)
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/@PROJECT_NAME@)
 
