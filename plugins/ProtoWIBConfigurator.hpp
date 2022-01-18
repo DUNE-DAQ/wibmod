@@ -18,7 +18,7 @@
 #include "wibmod/protowibconfigurator/Nljs.hpp"
 
 #include <appfwk/DAQModule.hpp>
-#include <appfwk/ThreadHelper.hpp>
+#include <utilities/WorkerThread.hpp>
 
 #include <string>
 #include <memory>
