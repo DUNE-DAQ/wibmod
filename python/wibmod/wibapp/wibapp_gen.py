@@ -50,10 +50,10 @@ def get_wib_app(nickname,
                              plugin = 'WIBConfigurator',
                              conf = wib.WIBConf(wib_addr = endpoint,
                                  settings = wib.WIBSettings(
+                                     femb0 = wib.FEMBSettings(),
                                      femb1 = wib.FEMBSettings(),
                                      femb2 = wib.FEMBSettings(),
-                                     femb3 = wib.FEMBSettings(),
-                                     femb4 = wib.FEMBSettings()
+                                     femb3 = wib.FEMBSettings()
                                      )
                                  )
                              )]
