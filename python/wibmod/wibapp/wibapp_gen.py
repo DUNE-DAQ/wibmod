@@ -16,9 +16,8 @@ import dunedaq.wibmod.wibconfigurator as wib
 import dunedaq.wibmod.protowibconfigurator as protowib
 
 
-from appfwk.app import App, ModuleGraph
-from appfwk.daqmodule import DAQModule
-from appfwk.conf_utils import Direction, Connection
+from daqconf.core.app import App, ModuleGraph
+from daqconf.core.daqmodule import DAQModule
 
 #===============================================================================
 def get_wib_app(nickname, 
