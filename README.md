@@ -14,12 +14,11 @@ applications (modules) can receive.
 
 To build metadata for a single WIB(3) named `BLAND` with IP `192.168.1.4`:
 ```
-wibconf_gen -w BLAND tcp://192.168.1.4:1234 wibapp
+wibconf_gen -w WIB_BLAND tcp://192.168.1.4:1234 wibapp
 ```
 This will store the metadata in the folder `wibapp`. To include more WIBs,
 include additional `-w [NAME] [ENDPOINT]` arguments. Where the `[NAME]` should
-uniquely identify a WIB (internally, modules are generated with names prefixed
-by `wib` e.g. `wibBLAND`) and the `[ENDPOINT]` is the ZMQ socket the WIB's 
+uniquely identify a WIB and the `[ENDPOINT]` is the ZMQ socket the WIB's 
 [`wib_server`](https://github.com/DUNE-DAQ/dune-wib-firmware/tree/master/sw) is 
 listening on. 
 
