@@ -96,9 +96,9 @@ void
 WIBConfigurator::do_settings(const data_t& payload)
 {
 
+  TLOG() << "Building WIB config for " << get_name();
   const wibconfigurator::WIBSettings &conf = payload.get<wibconfigurator::WIBSettings>();
   
-  TLOG_DEBUG(0) << "Building WIB config for " << get_name();
   wib::ConfigureWIB req;
   req.set_cold(conf.cold);
   req.set_pulser(conf.pulser);
@@ -106,22 +106,22 @@ WIBConfigurator::do_settings(const data_t& payload)
 
   for(size_t iFEMB = 0; iFEMB < 4; iFEMB++)
   {
-    TLOG_DEBUG(0) << "Building FEMB " << iFEMB << " config for " << get_name();
+    TLOG() << "Building FEMB " << iFEMB << " config for " << get_name();
     wib::ConfigureWIB::ConfigureFEMB *femb_conf = req.add_fembs();
     populate_femb_conf(femb_conf,femb_conf_i(conf,iFEMB));
   }
 
-  TLOG_DEBUG(0) << "Sending WIB configuration to " << get_name();
+  TLOG() << "Sending WIB configuration to " << get_name();
   wib::Status rep;
   wib->send_command(req,rep);
   
   if (rep.success())
   {
-    TLOG_DEBUG(0) << get_name() << " successfully configured";
+    TLOG() << get_name() << " successfully configured";
   }
   else
   {
-    TLOG_DEBUG(0) << get_name() << " failed to configure";
+    TLOG() << get_name() << " failed to configure";
     throw ConfigurationFailed(ERS_HERE, get_name());
   }
 }
