@@ -84,14 +84,68 @@ WIBConfigurator::do_conf(const data_t& payload)
   const wibconfigurator::WIBConf &conf = payload.get<wibconfigurator::WIBConf>();
 
   TLOG_DEBUG(0) << "WIBConfigurator " << get_name() << " is " << conf.wib_addr;
-  
+
   wib = std::unique_ptr<WIBCommon>(new WIBCommon(conf.wib_addr));
 
   TLOG_DEBUG(0) << get_name() << " successfully initialized";
   
   do_settings(conf.settings);
+
+  check_timing();
 }
 
+void
+WIBConfigurator::check_timing()
+{
+
+  TLOG_DEBUG(0) << get_name() << " Checking timing status";
+  wib::GetTimingStatus req;
+  wib::GetTimingStatus::TimingStatus rep;
+  wib->send_command(req,rep);
+  
+  int endpoint_status = rep.ept_status() & 0xf;
+  if (endpoint_status == 0x8)
+  {
+    TLOG_DEBUG(0) << get_name() << " timing status correct as " << endpoint_status;
+    return;
+  } 
+  
+  TLOG_DEBUG(0) << get_name() << " timing status incorrect as " << endpoint_status; 
+  wib::Poke* req2;
+  wib::Status rep2;
+  req2->set_addr(0xA00C000C); //See WIB firmware document, this is the register for timing edge select (0xA00C000C);
+  req2->set_value(0x1);
+
+  wib->send_command(*req2,rep2);
+  if(!rep2.success())
+  {
+    TLOG_DEBUG(0) << get_name() << " failed to write timing edge switch";
+    throw ConfigurationFailed(ERS_HERE, get_name());
+  }
+
+  wib::ResetTiming req3;
+  wib::GetTimingStatus::TimingStatus rep3;
+  wib->send_command(req3,rep3);
+
+  //Because I've seen the status change after this initial reset
+  TLOG_DEBUG(0) << get_name() << " Checking timing status";
+  wib::GetTimingStatus req4;
+  wib::GetTimingStatus::TimingStatus rep4;
+  wib->send_command(req4,rep4);
+
+  endpoint_status = rep.ept_status() & 0xf;
+  if (endpoint_status == 0x8)
+  {
+    TLOG_DEBUG(0) << get_name() << " timing status correct as " << endpoint_status;
+    return;
+  } 
+  else
+  {
+    TLOG_DEBUG(0) << get_name() << " timing status incorrect as " << endpoint_status; 
+    throw ConfigurationFailed(ERS_HERE, get_name());
+  }
+
+}
 void
 WIBConfigurator::do_settings(const data_t& payload)
 {

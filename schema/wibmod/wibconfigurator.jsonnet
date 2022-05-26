@@ -67,7 +67,7 @@ local types = {
                 doc="The ZeroMQ network address for the WIB to interact with"),
                 
         s.field("settings", self.settings,
-                doc="The initial settings applied without an explicit settings command")
+                doc="The initial settings applied without an explicit settings command"),
                 
     ], doc="WIB module settings (argument to conf)")
 
