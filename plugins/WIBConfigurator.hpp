@@ -53,6 +53,7 @@ private:
   // Commands
   void do_conf(const data_t&);
   void do_settings(const data_t&);
+  void check_timing();
   void do_start(const data_t&);
   void do_stop(const data_t&);
   void do_scrap(const data_t&);
