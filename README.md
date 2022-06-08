@@ -12,14 +12,13 @@ applications (modules) can receive.
 
 ### Generate a WIB application
 
-To build metadata for a single WIB(2) named `BLAND` with IP `192.168.1.4`:
+To build metadata for a single WIB(3) named `BLAND` with IP `192.168.1.4`:
 ```
-python -m wibmod.wibapp wibapp -w BLAND tcp://192.168.1.4:1234
+wibconf_gen -w WIB_BLAND tcp://192.168.1.4:1234 wibapp
 ```
 This will store the metadata in the folder `wibapp`. To include more WIBs,
 include additional `-w [NAME] [ENDPOINT]` arguments. Where the `[NAME]` should
-uniquely identify a WIB (internally, modules are generated with names prefixed
-by `wib` e.g. `wibBLAND`) and the `[ENDPOINT]` is the ZMQ socket the WIB's 
+uniquely identify a WIB and the `[ENDPOINT]` is the ZMQ socket the WIB's 
 [`wib_server`](https://github.com/DUNE-DAQ/dune-wib-firmware/tree/master/sw) is 
 listening on. 
 
@@ -29,7 +28,7 @@ WIB1 are also supported with the `-p [NAME] [IP]` argument.
 
 The `wibapp` metadata can be launched using nanorc:
 ```
-python -m nanorc wibapp
+nanorc wibapp
 ```
 The interactive run control can be used to send the `boot` command, to launch
 the WIB application. Follow this with `init` to start the WIB modules. 
