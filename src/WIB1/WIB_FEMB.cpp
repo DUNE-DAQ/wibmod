@@ -669,7 +669,7 @@ uint16_t WIB::SetupFEMBASICs(uint8_t iFEMB, uint8_t gain, uint8_t shape, uint8_t
   {
     // Set them all to high baseline
     fe_map.set_board(useTestCapacitance,0,gain,shape,
-                      useOutputMonitor,~bypassOutputBuffer,~highLeakage,
+                      useOutputMonitor,!bypassOutputBuffer,!highLeakage,
                       monitorBandgapNotTemp,monitorTempBandgapNotSignal,useCh16HighPassFilter,
                       leakagex10,acCoupling,internalDACControl,internalDACValue
                   );
@@ -679,7 +679,7 @@ uint16_t WIB::SetupFEMBASICs(uint8_t iFEMB, uint8_t gain, uint8_t shape, uint8_t
   else
   {
     fe_map.set_board(useTestCapacitance,~highBaseline,gain,shape,
-                      useOutputMonitor,~bypassOutputBuffer,~highLeakage,
+                      useOutputMonitor,!bypassOutputBuffer,!highLeakage,
                       monitorBandgapNotTemp,monitorTempBandgapNotSignal,useCh16HighPassFilter,
                       leakagex10,acCoupling,internalDACControl,internalDACValue
                   );
