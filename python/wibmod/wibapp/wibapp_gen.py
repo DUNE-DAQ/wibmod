@@ -22,7 +22,7 @@ from daqconf.core.daqmodule import DAQModule
 #===============================================================================
 def get_wib_app(nickname, 
                 endpoint, 
-                version,
+                version, gain, shaping_time, baseline, pulse_dac, pulser, buf,
                 host="localhost"):
     '''
     Here an entire application consisting only of one (Proto)WIBConfigurator module is generated. 
@@ -49,10 +49,11 @@ def get_wib_app(nickname,
                              plugin = 'WIBConfigurator',
                              conf = wib.WIBConf(wib_addr = endpoint,
                                  settings = wib.WIBSettings(
-                                     femb0 = wib.FEMBSettings(),
-                                     femb1 = wib.FEMBSettings(),
-                                     femb2 = wib.FEMBSettings(),
-                                     femb3 = wib.FEMBSettings()
+                                     pulser = pulser,
+                                     femb0 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf),
+                                     femb1 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf),
+                                     femb2 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf),
+                                     femb3 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf)
                                      )
                                  )
                              )]

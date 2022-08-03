@@ -70,7 +70,7 @@ WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf,
   femb_conf->set_leak(conf.leak);
   femb_conf->set_leak_10x(conf.leak_10x != 0);
   femb_conf->set_ac_couple(conf.ac_couple);
-  femb_conf->set_buffer(conf.buffer);
+  femb_conf->set_buffer(conf.buffering);
 
   femb_conf->set_strobe_skip(conf.strobe_skip);
   femb_conf->set_strobe_delay(conf.strobe_delay);
