@@ -14,7 +14,7 @@ applications (modules) can receive.
 
 To build metadata for a single WIB(3) named `BLAND` with IP `192.168.1.4`:
 ```
-wibconf_gen -w WIB_BLAND tcp://192.168.1.4:1234 wibapp
+wibconf_gen -w wib001 tcp://192.168.1.4:1234 wibapp
 ```
 This will store the metadata in the folder `wibapp`. To include more WIBs,
 include additional `-w [NAME] [ENDPOINT]` arguments. Where the `[NAME]` should
@@ -23,15 +23,19 @@ uniquely identify a WIB and the `[ENDPOINT]` is the ZMQ socket the WIB's
 listening on. 
 
 WIB1 are also supported with the `-p [NAME] [IP]` argument.
+For all options: 
+```
+wibconf_gen -h
+```
 
 ### Running with nanorc
 
 The `wibapp` metadata can be launched using nanorc:
 ```
-nanorc wibapp
+nanorc wibapp wibapp
 ```
 The interactive run control can be used to send the `boot` command, to launch
-the WIB application. Follow this with `init` to start the WIB modules. 
+the WIB application and initialize the WIB modules. 
 
 Assuming the WIB(s) are powered and ready to receive configurations, send `conf`
 to connect to the WIBs and load the initial settings. Sending additional 
@@ -39,7 +43,7 @@ settings to the WIBs requires sending a `settings` command, which `nanorc` does
 not currently support. A real WIB will now be streaming data out over its fibers
 from all FEMBs.
 
-To change settings sent to the WIBs, one can edit `wibapp/data/wibapp_conf.json` 
+To change settings sent to the WIBs, one can edit `wibapp/data/wib001_conf.json` 
 by hand. In the future, some run control database will presumably build this
 configuration information based on the desired detector state.
 
@@ -92,10 +96,16 @@ checks.
 
 ### Integration into larger DAQ system
 
-The stand-alone WIB app is a good starting place and testing. Eventually
-the run control or [minidaqapp](https://github.com/DUNE-DAQ/minidaqapp) may 
-want to include (`Proto`)`WIBConfigurator` modules to add WIB control to some
-larger system. 
+The stand-alone WIB app is a good starting place and testing. The
+run control can integratoe the WIB configuration and the overall DAQ configuration by starting nanorc with a specific top-configuration file. Example:
+```
+{
+    "apparatus_id":"np04_coldbox",
+    "np04_coldbox_wibs":"/nfs/sw/dunedaq/dunedaq-v3.1.0/configurations/np04_coldbox_wibs_2us",
+    "np04_coldbox_felix_ctrl":"/nfs/sw/dunedaq/dunedaq-v3.1.0/configurations/np04_coldbox_flx_ctrl",
+    "np04_coldbox_daq":"/nfs/sw/dunedaq/dunedaq-v3.1.0/configurations/np04_coldbox_daq_4ms"
+}
+```
 
 ## Stateful vs stateless
 
@@ -109,7 +119,11 @@ This has two important consequences:
 * Whoever wants to configure the WIB (DUNE DAQ/SC/CCM) has to keep track of the
   intended state. Since these entities _should be_ tracking the detector state
   anyway, this seems fine.
-  
+
+In the DAQ framework it is possible to register commands with the states in which they can be successfully executed.
+The DAQ application framework keeps track to the DAQ state (which is not the detector state!) and makes sanity checks at this level.
+This is an extension to the wibmod code that may be considered.
+
 That said, an argument could be made that `WIBConfigurator` should perhaps track
 the last-programmed state and allow changes to this state, rather than requiring 
 the entire WIB state be fully specified for each configuration. Such arguments
