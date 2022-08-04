@@ -9,31 +9,31 @@ local types = {
 
     value : s.number("Value", "u4", doc="A digitally variable value"),
     
-    bool : s.number("Bool", "u4", doc="1/0 for enable/disabled or true/false"),
+    bool : s.boolean("Bool", doc="true/false"),
 
     femb_settings: s.record("FEMBSettings", [
     
         s.field("enabled", self.bool, 1,
                 doc="True of FEMB should be configured and read out by WIB"),
     
-        s.field("test_cap", self.bool, 0, 
+        s.field("test_cap", self.bool, false, 
                 doc="Enable the test capacitor"), 
         s.field("gain", self.option, 0, 
                 doc="Channel gain selector: 14, 25, 7.8, 4.7 mV/fC (0 - 3)" ), 
-        s.field("peak_time", self.option, 0,
+        s.field("peak_time", self.option, 3,
                 doc="Channel peak time selector: 1.0, 0.5, 3, 2 us (0 - 3)"),
-        s.field("baseline", self.option, 0,
-                doc="Baseline selector: 0 (900 mV), 1 (200 mV))"),
+        s.field("baseline", self.option, 2,
+                doc="Baseline selector: 0 (900 mV), 1 (200 mV), 2 (200 mV collection, 900 mV induction)"),
         s.field("pulse_dac", self.value, 0,
                 doc="Pulser DAC setting [0-63]"),
                 
         s.field("leak", self.option, 0,
                 doc="Leak current selector: 0 (500 pA), 1 (100 pA)"),
-        s.field("leak_10x", self.bool, 0,
+        s.field("leak_10x", self.bool, false,
                 doc="Multiply leak current by 10 if true"),
-        s.field("ac_couple", self.bool, 0,
+        s.field("ac_couple", self.bool, false,
                 doc="false (DC coupling), true (AC coupling)"),
-        s.field("buffer", self.option, 0,
+        s.field("buffering", self.option, 0,
                 doc="0 (no buffer), 1 (se buffer), 2 (sedc buffer)"),
                 
         s.field("strobe_skip", self.value, 255,
@@ -47,11 +47,11 @@ local types = {
 
     settings: s.record("WIBSettings", [
   
-        s.field("cold", self.bool, 0,
+        s.field("cold", self.bool, false,
                 doc="True if the front end electronics are COLD (77k)"),
-        s.field("pulser", self.bool, 0,
+        s.field("pulser", self.bool, false,
                 doc="True if the calibration pulser should be enabled"),
-        s.field("adc_test_pattern", self.bool, 0,
+        s.field("adc_test_pattern", self.bool, false,
                 doc="True if the COLDADC test pattern should be enabled"),
                 
         s.field("femb0", self.femb_settings, doc="Settings for FEMB in slot 0"),
