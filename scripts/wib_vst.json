@@ -20,12 +20,12 @@
             {
                 "name": "wib005",
                 "address": "tcp://10.73.137.24:1234"
-            },
+            }
         ],
-        "protowib": [],
+        "protowib": []
     },
     "boot":{
         "ers_impl": "cern",
-        "opmon_impl": "cern",
+        "opmon_impl": "cern"
     }
 }
