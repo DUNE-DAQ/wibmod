@@ -1,0 +1,31 @@
+{
+    "wibmod":{
+        "wibserver": [
+            {
+                "name": "wib001",
+                "address": "tcp://10.73.137.20:1234"
+            },
+            {
+                "name": "wib002",
+                "address": "tcp://10.73.137.21:1234"
+            },
+            {
+                "name": "wib003",
+                "address": "tcp://10.73.137.22:1234"
+            },
+            {
+                "name": "wib004",
+                "address": "tcp://10.73.137.23:1234"
+            },
+            {
+                "name": "wib005",
+                "address": "tcp://10.73.137.24:1234"
+            }
+        ],
+        "protowib": []
+    },
+    "boot":{
+        "ers_impl": "cern",
+        "opmon_impl": "cern"
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "wibmod":{
+        "wibserver": [
+            {
+                "name": "TESTSTAND",
+                "address": "tcp://192.168.121.1:1234"
+            },
+            {
+                "name": "CANTSTAND",
+                "address": "tcp://192.168.121.1:1235"
+            }
+        ],
+        "protowib": [
+            {
+                "name": "STANDASIDE",
+                "address": "192.168.121.1"
+            },
+            {
+                "name": "STANDBACK",
+                "address": "192.168.121.2"
+            }
+        ],
+        "host_wib": "whatnot",
+        "gain": 1,
+        "shaping_time": 1,
+        "baseline": 1,
+        "pulse_dac": 11,
+        "pulser": true,
+        "pulser": true,
+        "buffering": 1
+    },
+    "boot":{
+        "ers_impl": "cern",
+        "base_command_port": 666,
+        "opmon_impl": "cern",
+        "op_env": "somebody"
+    }
+}
