@@ -50,10 +50,10 @@ def get_wib_app(nickname,
                              conf = wib.WIBConf(wib_addr = endpoint,
                                  settings = wib.WIBSettings(
                                      pulser = pulser,
-                                     femb0 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf),
-                                     femb1 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf),
-                                     femb2 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf),
-                                     femb3 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf)
+                                     femb0 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser),
+                                     femb1 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser),
+                                     femb2 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser),
+                                     femb3 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser)
                                      )
                                  )
                              )]
