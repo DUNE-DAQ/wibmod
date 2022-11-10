@@ -5,10 +5,10 @@ WIB configuration and monitoring interface for DUNE's appfwk.
 ## Testing
 
 A python utility is included to generate metadata to test control of multiple 
-WIBs with [nanorc](https://github.com/DUNE-DAQ/nanorc). This metadata is a set
+WIBs with [nanorc](https://dune-daq-sw.readthedocs.io/en/latest/packages/nanorc/). This metadata is a set
 of JSON files that describe the DAQ applications (consisting of interconnected
-[appfwk](https://github.com/DUNE-DAQ/appfwk) modules) and commands these 
-applications (modules) can receive.
+[appfwk](https://dune-daq-sw.readthedocs.io/en/latest/packages/appfwk/) DAQModules) and commands these 
+applications (DAQModules) can receive.
 
 ### Generate a WIB application
 
