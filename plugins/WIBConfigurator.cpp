@@ -120,7 +120,7 @@ WIBConfigurator::check_timing()
   if(!rep2.success())
   {
     TLOG_DEBUG(0) << get_name() << " failed to write timing edge switch";
-    throw ConfigurationFailed(ERS_HERE, get_name());
+    throw ConfigurationFailed(ERS_HERE, get_name(), rep2.extra());
   }
 
   wib::ResetTiming req3;
@@ -130,8 +130,7 @@ WIBConfigurator::check_timing()
   //Because I've seen the status change after this initial reset
   TLOG_DEBUG(0) << get_name() << " Checking timing status";
   wib::GetTimingStatus req4;
-  wib::GetTimingStatus::TimingStatus rep4;
-  wib->send_command(req4,rep4);
+  wib::GetTimingStatus::TimingStatus rep4;  wib->send_command(req4,rep4);
 
   endpoint_status = rep.ept_status() & 0xf;
   if (endpoint_status == 0x8)
@@ -142,7 +141,7 @@ WIBConfigurator::check_timing()
   else
   {
     TLOG_DEBUG(0) << get_name() << " timing status incorrect as " << endpoint_status; 
-    throw ConfigurationFailed(ERS_HERE, get_name());
+    throw ConfigurationFailed(ERS_HERE, get_name(), std::to_string(endpoint_status));
   }
 
 }
@@ -176,7 +175,7 @@ WIBConfigurator::do_settings(const data_t& payload)
   else
   {
     TLOG() << get_name() << " failed to configure";
-    throw ConfigurationFailed(ERS_HERE, get_name());
+    throw ConfigurationFailed(ERS_HERE, get_name(), rep.extra());
   }
 }
 
