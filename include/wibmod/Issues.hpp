@@ -34,9 +34,9 @@ ERS_DECLARE_ISSUE_BASE(wibmod,
 ERS_DECLARE_ISSUE_BASE(wibmod,
                        ConfigurationFailed,
                        appfwk::GeneralDAQModuleIssue,
-                       "WIB " << name << " failed to configure.",
+                       "WIB " << name << " failed to configure. Additional information: " << info,
                        ((std::string)name),
-                       ERS_EMPTY)
+                       ((std::string)info))
                                
 // WIB1 Issues
 
