@@ -26,6 +26,8 @@ local types = {
                 doc="Baseline selector: 0 (900 mV), 1 (200 mV), 2 (200 mV collection, 900 mV induction)"),
         s.field("pulse_dac", self.value, 0,
                 doc="Pulser DAC setting [0-63]"),
+        s.field("gain_match", self.bool, true,
+                doc="Enable pulser DAC gain matching"),
                 
         s.field("leak", self.option, 0,
                 doc="Leak current selector: 0 (500 pA), 1 (100 pA)"),
@@ -51,6 +53,8 @@ local types = {
                 doc="True if the front end electronics are COLD (77k)"),
         s.field("pulser", self.bool, false,
                 doc="True if the calibration pulser should be enabled"),
+        s.field("detector_type", self.value, 0,
+                doc="Detector type selector: upper APA (0), lower APA (1), CRP (2)"),
         s.field("adc_test_pattern", self.bool, false,
                 doc="True if the COLDADC test pattern should be enabled"),
                 

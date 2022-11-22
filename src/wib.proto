@@ -113,7 +113,8 @@ message ConfigureWIB {
         bool leak_10x = 8; // multiply leak by 10 if true
         bool ac_couple = 9; // false (DC coupling), true (AC coupling)
         uint32 buffer = 10; // 0 (no buffer), 1 (se buffer), 2 (sedc buffer)
-        
+	bool gain_match = 14; //0 is enabled, 1 is disabled, bit SGP in LArASIC datasheet        
+
         // COLDATA calibration strobe
         uint32 strobe_skip = 11; // 2MHz periods to skip after strobe
         uint32 strobe_delay = 12; // offset from 2MHz to start strobe in 64MHz periods
@@ -143,6 +144,8 @@ message ConfigureWIB {
     ConfigureCOLDADC adc_conf = 5; // specify non-hardcoded values for COLDADC (omit for defaults)
     
     bool frame_dd = 6; // enable Frame-DD from COLDATA instead of Frame-14 data
+
+    uint32 detectorType = 7; // 0 for upper APA, 1 for lower APA, 2 for CRP
     
     //replies Status
 }

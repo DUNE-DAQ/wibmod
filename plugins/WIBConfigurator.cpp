@@ -66,6 +66,7 @@ WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf,
   femb_conf->set_peak_time(conf.peak_time);
   femb_conf->set_baseline(conf.baseline);
   femb_conf->set_pulse_dac(conf.pulse_dac);
+  femb_conf->set_gain_match(conf.gain_match);
 
   femb_conf->set_leak(conf.leak);
   femb_conf->set_leak_10x(conf.leak_10x != 0);
@@ -89,6 +90,8 @@ WIBConfigurator::do_conf(const data_t& payload)
 
   TLOG_DEBUG(0) << get_name() << " successfully initialized";
   
+  check_timing();
+
   do_settings(conf.settings);
 
   check_timing();
@@ -156,6 +159,7 @@ WIBConfigurator::do_settings(const data_t& payload)
   req.set_cold(conf.cold);
   req.set_pulser(conf.pulser);
   req.set_adc_test_pattern(conf.adc_test_pattern);
+  req.set_detector_type(conf.detector_type);
 
   for(size_t iFEMB = 0; iFEMB < 4; iFEMB++)
   {
