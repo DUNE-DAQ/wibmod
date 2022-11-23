@@ -54,7 +54,7 @@ local types = {
         s.field("pulser", self.bool, false,
                 doc="True if the calibration pulser should be enabled"),
         s.field("detector_type", self.value, 0,
-                doc="Detector type selector: upper APA (0), lower APA (1), CRP (2)"),
+                doc="Detector type selector: WIB default (0), upper APA (1), lower APA (2), CRP (3)"),
         s.field("adc_test_pattern", self.bool, false,
                 doc="True if the COLDADC test pattern should be enabled"),
                 

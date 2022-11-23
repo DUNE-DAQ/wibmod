@@ -114,28 +114,12 @@ WIBConfigurator::check_timing()
   } 
   
   TLOG_DEBUG(0) << get_name() << " timing status incorrect as " << endpoint_status; 
-  wib::Poke* req2;
-  wib::Status rep2;
-  req2->set_addr(0xA00C000C); //See WIB firmware document, this is the register for timing edge select (0xA00C000C);
-  req2->set_value(0x1);
 
-  wib->send_command(*req2,rep2);
-  if(!rep2.success())
-  {
-    TLOG_DEBUG(0) << get_name() << " failed to write timing edge switch";
-    throw ConfigurationFailed(ERS_HERE, get_name(), rep2.extra());
-  }
+  wib::ResetTiming req2;
+  wib::GetTimingStatus::TimingStatus rep2;
+  wib->send_command(req2,rep2);
 
-  wib::ResetTiming req3;
-  wib::GetTimingStatus::TimingStatus rep3;
-  wib->send_command(req3,rep3);
-
-  //Because I've seen the status change after this initial reset
-  TLOG_DEBUG(0) << get_name() << " Checking timing status";
-  wib::GetTimingStatus req4;
-  wib::GetTimingStatus::TimingStatus rep4;  wib->send_command(req4,rep4);
-
-  endpoint_status = rep.ept_status() & 0xf;
+  endpoint_status = rep2.ept_status() & 0xf;
   if (endpoint_status == 0x8)
   {
     TLOG_DEBUG(0) << get_name() << " timing status correct as " << endpoint_status;

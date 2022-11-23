@@ -145,7 +145,7 @@ message ConfigureWIB {
     
     bool frame_dd = 6; // enable Frame-DD from COLDATA instead of Frame-14 data
 
-    uint32 detectorType = 7; // 0 for upper APA, 1 for lower APA, 2 for CRP
+    uint32 detector_type = 7; // 0 for WIB guess, 1 for upper APA, 2 for lower APA, 3 for CRP
     
     //replies Status
 }
