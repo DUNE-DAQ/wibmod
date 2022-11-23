@@ -81,11 +81,13 @@ def cli(config, debug, json_dir):
             endpoint     = v,
             version      = 2,
             gain         = wibmod.gain,
+	    gain_match   = wibmod.gain_match,	   
             shaping_time = wibmod.shaping_time,
             baseline     = wibmod.baseline,
             pulse_dac    = wibmod.pulse_dac,
             pulser       = wibmod.pulser,
             buf          = wibmod.buffering,
+	    detector_type= wibmod.detector_type,
             host         = wibmod.host_wib
         )
 
