@@ -20,14 +20,14 @@
 #include <appfwk/DAQModule.hpp>
 #include <utilities/WorkerThread.hpp>
 
-#include <memory>
 #include <string>
+#include <memory>
 
 namespace dunedaq {
 namespace wibmod {
 
 /**
- * @brief ProtoWIBConfigurator is a simple DAQModule implementation that
+ * @brief ProtoWIBConfigurator is a simple DAQModule implementation that 
  * provides a configuration and monitoring interface to the WIB1
  */
 class ProtoWIBConfigurator : public dunedaq::appfwk::DAQModule
@@ -39,11 +39,10 @@ public:
    */
   explicit ProtoWIBConfigurator(const std::string& name);
 
-  ProtoWIBConfigurator(const ProtoWIBConfigurator&) = delete; ///< ProtoWIBConfigurator is not copy-constructible
-  ProtoWIBConfigurator& operator=(const ProtoWIBConfigurator&) =
-    delete;                                                         ///< ProtoWIBConfigurator is not copy-assignable
-  ProtoWIBConfigurator(ProtoWIBConfigurator&&) = delete;            ///< ProtoWIBConfigurator is not move-constructible
-  ProtoWIBConfigurator& operator=(ProtoWIBConfigurator&&) = delete; ///< ProtoWIBConfigurator is not move-assignable
+  ProtoWIBConfigurator(const ProtoWIBConfigurator&) = delete;            ///< ProtoWIBConfigurator is not copy-constructible
+  ProtoWIBConfigurator& operator=(const ProtoWIBConfigurator&) = delete; ///< ProtoWIBConfigurator is not copy-assignable
+  ProtoWIBConfigurator(ProtoWIBConfigurator&&) = delete;                 ///< ProtoWIBConfigurator is not move-constructible
+  ProtoWIBConfigurator& operator=(ProtoWIBConfigurator&&) = delete;      ///< ProtoWIBConfigurator is not move-assignable
 
   void init(const data_t&) override;
 
@@ -56,17 +55,16 @@ private:
   void do_start(const data_t&);
   void do_stop(const data_t&);
   void do_scrap(const data_t&);
-
-  const protowibconfigurator::FEMBSettings& femb_conf_i(const protowibconfigurator::WIBSettings& conf, size_t i);
-
-  void setup_femb_fake_data(size_t iFEMB,
-                            const protowibconfigurator::FEMBSettings& FEMB_conf,
-                            bool continue_on_reg_read_error);
+  
+  const protowibconfigurator::FEMBSettings& femb_conf_i(const protowibconfigurator::WIBSettings &conf, size_t i);
+  
+  void setup_femb_fake_data(size_t iFEMB, const protowibconfigurator::FEMBSettings& FEMB_conf, bool continue_on_reg_read_error);
   void setup_femb(size_t iFEMB, const protowibconfigurator::FEMBSettings& FEMB_conf, bool continue_on_reg_read_error);
+
 };
 
 } // namespace wibmod
-
+                       
 } // namespace dunedaq
 
 #endif // WIBMOD_PLUGINS_PROTOWIBCONFIGURATOR_HPP_
