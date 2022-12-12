@@ -14,15 +14,15 @@
 #ifndef WIBMOD_PLUGINS_WIBCONFIGURATOR_HPP_
 #define WIBMOD_PLUGINS_WIBCONFIGURATOR_HPP_
 
+#include "wib.pb.h"
 #include "wibmod/WIBCommon.hpp"
 #include "wibmod/wibconfigurator/Nljs.hpp"
-#include "wib.pb.h"
 
 #include <appfwk/DAQModule.hpp>
 #include <utilities/WorkerThread.hpp>
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace dunedaq {
 namespace wibmod {
@@ -57,15 +57,14 @@ private:
   void do_start(const data_t&);
   void do_stop(const data_t&);
   void do_scrap(const data_t&);
-  
-  // Helpers
-  void populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const wibconfigurator::FEMBSettings &conf);
-  const wibconfigurator::FEMBSettings& femb_conf_i(const wibconfigurator::WIBSettings &conf, size_t i);
 
+  // Helpers
+  void populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB* femb_conf, const wibconfigurator::FEMBSettings& conf);
+  const wibconfigurator::FEMBSettings& femb_conf_i(const wibconfigurator::WIBSettings& conf, size_t i);
 };
 
 } // namespace wibmod
-                       
+
 } // namespace dunedaq
 
 #endif // WIBMOD_PLUGINS_WIBCONFIGURATOR_HPP_
