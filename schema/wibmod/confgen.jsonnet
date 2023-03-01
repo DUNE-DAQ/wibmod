@@ -15,7 +15,8 @@ local cs = {
   gain_selector:         s.number('gain',         dtype='i4', constraints=nc(minimum=0, maximum=3),  doc='Channel gain selector: 14, 25, 7.8, 4.7 mV/fC (0 - 3)'),
   pulse_dac_selector:    s.number('pulse_dac',    dtype='i4', constraints=nc(minimum=0, maximum=63), doc='Pulser DAC setting [0-63]'),
   buffering_selector:    s.number('buffering',    dtype='i4', constraints=nc(minimum=0, maximum=2),  doc='0 (no buffer), 1 (se buffer), 2 (sedc buffer)'),
-
+  detector_type_selector:s.number('detector_type',dtype='i4', constraints=nc(minimum=0, maximum=3),  doc='Detector type: 0 (use WIB default), 1 (upper APA), 2 (lower APA), 3 (CRP)'), 
+ 
   wib: s.record('wib', [
     s.field('name',    daqconf.Str, default="", doc='server name (?)'),
     s.field('address', daqconf.Str, default="", doc='server IP (?)'),
@@ -32,7 +33,9 @@ local cs = {
     s.field('baseline',     self.baseline_selector,     default=2,           doc='Baseline selector: 0 (900 mV), 1 (200 mV), 2 (200 mV collection, 900 mV induction)'),
     s.field('pulse_dac',    self.pulse_dac_selector,    default=0,           doc='Pulser DAC setting [0-63]'),
     s.field('pulser',       daqconf.Flag,               default=false,       doc="Switch to enable pulser"),
+    s.field('gain_match',   daqconf.Flag,               default=true,        doc="Switch to enable gain matching for pulser amplitude"),
     s.field('buffering',    self.buffering_selector,    default=0,           doc='0 (no buffer), 1 (se buffer), 2 (sedc buffer)'),
+    s.field('detector_type',self.detector_type_selector,default=0,           doc='Detector type: 0 (use WIB default), 1 (upper APA), 2 (lower APA), 3 (CRP)'),
   ]),
 
   wibmod_gen: s.record('wibmod_gen', [

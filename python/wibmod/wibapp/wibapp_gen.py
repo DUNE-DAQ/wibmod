@@ -22,7 +22,7 @@ from daqconf.core.daqmodule import DAQModule
 #===============================================================================
 def get_wib_app(nickname, 
                 endpoint, 
-                version, gain, shaping_time, baseline, pulse_dac, pulser, buf,
+                version, gain, gain_match, shaping_time, baseline, pulse_dac, pulser, buf, detector_type,
                 host="localhost"):
     '''
     Here an entire application consisting only of one (Proto)WIBConfigurator module is generated. 
@@ -50,10 +50,11 @@ def get_wib_app(nickname,
                              conf = wib.WIBConf(wib_addr = endpoint,
                                  settings = wib.WIBSettings(
                                      pulser = pulser,
-                                     femb0 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser),
-                                     femb1 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser),
-                                     femb2 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser),
-                                     femb3 = wib.FEMBSettings(gain=gain, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser)
+                                     detector_type = detector_type,
+                                     femb0 = wib.FEMBSettings(gain=gain, gain_match=gain_match, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser),
+                                     femb1 = wib.FEMBSettings(gain=gain, gain_match=gain_match, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser),
+                                     femb2 = wib.FEMBSettings(gain=gain, gain_match=gain_match, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser),
+                                     femb3 = wib.FEMBSettings(gain=gain, gain_match=gain_match, peak_time=shaping_time, baseline=baseline, pulse_dac=pulse_dac, buffering=buf, test_cap=pulser)
                                      )
                                  )
                              )]

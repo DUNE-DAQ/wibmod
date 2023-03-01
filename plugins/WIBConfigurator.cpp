@@ -66,6 +66,7 @@ WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf,
   femb_conf->set_peak_time(conf.peak_time);
   femb_conf->set_baseline(conf.baseline);
   femb_conf->set_pulse_dac(conf.pulse_dac);
+  femb_conf->set_gain_match(conf.gain_match);
 
   femb_conf->set_leak(conf.leak);
   femb_conf->set_leak_10x(conf.leak_10x != 0);
@@ -89,6 +90,8 @@ WIBConfigurator::do_conf(const data_t& payload)
 
   TLOG_DEBUG(0) << get_name() << " successfully initialized";
   
+  check_timing();
+
   do_settings(conf.settings);
 
   check_timing();
@@ -111,28 +114,12 @@ WIBConfigurator::check_timing()
   } 
   
   TLOG_DEBUG(0) << get_name() << " timing status incorrect as " << endpoint_status; 
-  wib::Poke* req2;
-  wib::Status rep2;
-  req2->set_addr(0xA00C000C); //See WIB firmware document, this is the register for timing edge select (0xA00C000C);
-  req2->set_value(0x1);
 
-  wib->send_command(*req2,rep2);
-  if(!rep2.success())
-  {
-    TLOG_DEBUG(0) << get_name() << " failed to write timing edge switch";
-    throw ConfigurationFailed(ERS_HERE, get_name(), rep2.extra());
-  }
+  wib::ResetTiming req2;
+  wib::GetTimingStatus::TimingStatus rep2;
+  wib->send_command(req2,rep2);
 
-  wib::ResetTiming req3;
-  wib::GetTimingStatus::TimingStatus rep3;
-  wib->send_command(req3,rep3);
-
-  //Because I've seen the status change after this initial reset
-  TLOG_DEBUG(0) << get_name() << " Checking timing status";
-  wib::GetTimingStatus req4;
-  wib::GetTimingStatus::TimingStatus rep4;  wib->send_command(req4,rep4);
-
-  endpoint_status = rep.ept_status() & 0xf;
+  endpoint_status = rep2.ept_status() & 0xf;
   if (endpoint_status == 0x8)
   {
     TLOG_DEBUG(0) << get_name() << " timing status correct as " << endpoint_status;
@@ -156,6 +143,7 @@ WIBConfigurator::do_settings(const data_t& payload)
   req.set_cold(conf.cold);
   req.set_pulser(conf.pulser);
   req.set_adc_test_pattern(conf.adc_test_pattern);
+  req.set_detector_type(conf.detector_type);
 
   for(size_t iFEMB = 0; iFEMB < 4; iFEMB++)
   {
