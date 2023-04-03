@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(wibmod VERSION 1.4.6)
+project(wibmod VERSION 1.4.7)
 
 find_package(daq-cmake REQUIRED)
 
