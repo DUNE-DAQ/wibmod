@@ -13,8 +13,6 @@ from daqconf.core.conf_utils import make_app_command_data
 from daqconf.core.config_file import generate_cli_from_schema
 from daqconf.core.metadata import write_metadata_file
 
-CLOCK_SPEED_HZ = 50000000
-
 # Add -h as default help option
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
