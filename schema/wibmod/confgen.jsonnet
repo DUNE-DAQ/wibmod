@@ -39,8 +39,9 @@ local cs = {
   ]),
 
   wibmod_gen: s.record('wibmod_gen', [
-    s.field('boot',   daqconf.boot, default=daqconf.boot, doc='Boot parameters'),
-    s.field('wibmod', self.wibmod,  default=self.wibmod,  doc='WIB conf parameters'),
+    s.field('boot',     daqconf.boot, default=daqconf.boot, doc='Boot parameters'),
+    s.field('detector', daqconf.detector, default=daqconf.detector, doc='Boot parameters'),
+    s.field('wibmod',   self.wibmod,  default=self.wibmod,  doc='WIB conf parameters'),
   ]),
 };
 
