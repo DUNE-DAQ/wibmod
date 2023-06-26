@@ -66,9 +66,9 @@ def cli(
     moo.otypes.load_types('wibmod/confgen.jsonnet')
     import dunedaq.wibmod.confgen as confgen
     moo.otypes.load_types('daqconf/confgen.jsonnet')
-    import dunedaq.daqconf.confgen as daqconf
+    import dunedaq.daqconf.bootgen as bootgen
 
-    boot = daqconf.boot(**config_data.boot)
+    boot = bootgen.boot(**config_data.boot)
     if debug: console.log(f"boot configuration object: {boot.pod()}")
 
     ## etc...
