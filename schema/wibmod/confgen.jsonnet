@@ -5,8 +5,6 @@ local nc = moo.oschema.numeric_constraints;
 
 local sboot = import "daqconf/bootgen.jsonnet";
 local bootgen = moo.oschema.hier(sboot).dunedaq.daqconf.bootgen;
-local sdet = import "daqconf/detectorgen.jsonnet";
-local detectorgen = moo.oschema.hier(sdet).dunedaq.daqconf.detectorgen;
 
 local ns = "dunedaq.wibmod.confgen";
 local s = moo.oschema.schema(ns);
@@ -43,10 +41,9 @@ local cs = {
 
   wibmod_gen: s.record('wibmod_gen', [
     s.field('boot',     bootgen.boot, default=bootgen.boot, doc='Boot parameters'),
-    s.field('detector', detectorgen.detector, default=detectorgen.detector, doc='Boot parameters'),
     s.field('wibmod',   self.wibmod,  default=self.wibmod,  doc='WIB conf parameters'),
   ]),
 };
 
 // Output a topologically sorted array.
-sboot + sdet + moo.oschema.sort_select(cs, ns)
+sboot + moo.oschema.sort_select(cs, ns)
