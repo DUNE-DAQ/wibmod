@@ -12,7 +12,6 @@ find_package(appfwk REQUIRED)
 find_package(cppzmq REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(daqconf REQUIRED)
-find_package(fddaqconf REQUIRED)
 
 # Build the protobuf source/header without protobuf_generate_cpp because we 
 # don't like CMakeList.txt in sub directories...
