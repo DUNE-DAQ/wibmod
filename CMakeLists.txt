@@ -22,7 +22,6 @@ execute_process(COMMAND ${PROTOBUF_PROTOC_EXECUTABLE} --proto_path=${CMAKE_CURRE
 
 # appfwk magic functions
 
-add_definitions(-DPROTOBUF_USE_DLLS) 
 daq_add_library( wib.pb *.cpp WIB1/*.cpp WIB1/BUException/*.cpp LINK_LIBRARIES ${Protobuf_LIBRARY} cppzmq appfwk::appfwk logging::logging ers::ers )
 
 daq_codegen(*wibconfigurator.jsonnet TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 )
