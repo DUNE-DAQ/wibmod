@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(wibmod VERSION 1.4.9)
+project(wibmod VERSION 1.5.0)
 
 find_package(daq-cmake REQUIRED)
 
@@ -11,6 +11,7 @@ find_package(logging REQUIRED)
 find_package(appfwk REQUIRED)
 find_package(cppzmq REQUIRED)
 find_package(Protobuf REQUIRED)
+find_package(absl  REQUIRED)
 find_package(daqconf REQUIRED)
 
 # Build the protobuf source/header without protobuf_generate_cpp because we 
@@ -22,7 +23,7 @@ execute_process(COMMAND ${PROTOBUF_PROTOC_EXECUTABLE} --proto_path=${CMAKE_CURRE
 
 # appfwk magic functions
 
-daq_add_library( wib.pb *.cpp WIB1/*.cpp WIB1/BUException/*.cpp LINK_LIBRARIES ${Protobuf_LIBRARY} cppzmq appfwk::appfwk logging::logging ers::ers )
+daq_add_library( wib.pb *.cpp WIB1/*.cpp WIB1/BUException/*.cpp LINK_LIBRARIES ${Protobuf_LIBRARY} cppzmq appfwk::appfwk logging::logging ers::ers absl::log_internal_check_op )
 
 daq_codegen(*wibconfigurator.jsonnet TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 )
 
