@@ -111,13 +111,21 @@ def cli(
             endpoint     = v,
             version      = 2,
             gain         = wibmod.gain,
-	        gain_match   = wibmod.gain_match,	   
+	    gain_match   = wibmod.gain_match,	   
             shaping_time = wibmod.shaping_time,
             baseline     = wibmod.baseline,
             pulse_dac    = wibmod.pulse_dac,
             pulser       = wibmod.pulser,
             buf          = wibmod.buffering,
-	        detector_type= wibmod.detector_type,
+            line_driver  = wibmod.line_driver,
+            pulse_channels=wibmod.pulse_channels,
+            coldadc_conf = wibmod.coldadc_registers,
+	    detector_type= wibmod.detector_type,
+            wib_pulser_en       = wibmod.wib_pulser,
+            wib_pulser_dac      = wibmod.wib_pulser_dac,
+            wib_pulser_period   = wibmod.wib_pulser_period,
+            wib_pulser_phase    = wibmod.wib_pulser_phase,
+            wib_pulser_duration = wibmod.wib_pulser_duration,
             host         = wibmod.host_wib
         )
 

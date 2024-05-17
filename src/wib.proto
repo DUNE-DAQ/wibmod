@@ -105,20 +105,31 @@ message ConfigureWIB {
         bool test_cap = 2; // test capacitor enabled
         uint32 gain = 3; // 14, 25, 7.8, 4.7 mV/fC (0 - 3) NOTE: this mapping depends on LArASIC revision!
         uint32 peak_time = 4; // 1.0, 0.5, 3, 2 us (0 - 3) NOTE: this mapping depends on LArASIC revision!
-        uint32 baseline = 5; // 0 (900 mV), 1 (200 mV) NOTE: this mapping depends on LArASIC revision!
+        uint32 baseline = 5; // 0 (900 mV), 1 (200 mV), 2 (use APA mapping) NOTE: this mapping depends on LArASIC revision!
         uint32 pulse_dac = 6; // 6bit dac value
+	bool gain_match = 14; // Enable pulser amplitude gain matching for LArASIC
         
         // LArASIC channel
         uint32 leak = 7; // 0 (500 pA), 1 (100 pA)
         bool leak_10x = 8; // multiply leak by 10 if true
         bool ac_couple = 9; // false (DC coupling), true (AC coupling)
         uint32 buffer = 10; // 0 (no buffer), 1 (se buffer), 2 (sedc buffer)
-	bool gain_match = 14; //0 is enabled, 1 is disabled, bit SGP in LArASIC datasheet        
-
+        
         // COLDATA calibration strobe
         uint32 strobe_skip = 11; // 2MHz periods to skip after strobe
         uint32 strobe_delay = 12; // offset from 2MHz to start strobe in 64MHz periods
         uint32 strobe_length = 13; // length of strobe in 64MHz periods
+
+    	// Preset line driver configuration options
+	// 0 for detector default, 1 for current-mode (short cable)
+	// 2 for warm 25m cable, 3 for warm 35m, 4 for cold 25m, 5 for cold 25m
+	// Submit two values to configure each COLDATA differently. Submit one to use the same for both.
+	repeated uint32 line_driver = 15;
+
+	// List of up to 16 true/false values to choose which channels on each LArASIC to pulse
+	// Defaults to True for all 16 channels
+	// Note: no effect if no pulser type is enabled
+	repeated bool pulse_channels = 16;
     }
     
     // To specify non-hardcoded values for COLDADC registers
@@ -133,6 +144,15 @@ message ConfigureWIB {
         uint32 reg_30 = 8;
     }
 
+    // Message for configuring WIB internal pulser and enabling connection to FEMBs
+    message ConfigureWIBPulser {
+    	repeated bool femb_en = 1; // must supply 4
+    	uint32 pulse_dac = 2;
+	uint32 pulse_period = 3;
+	uint32 pulse_phase = 4;
+	uint32 pulse_duration = 5;
+    }
+
     repeated ConfigureFEMB fembs = 1; //must supply 4
     
     bool cold = 2; // True if front end is COLD (77k)
@@ -145,7 +165,9 @@ message ConfigureWIB {
     
     bool frame_dd = 6; // enable Frame-DD from COLDATA instead of Frame-14 data
 
-    uint32 detector_type = 7; // 0 for WIB guess, 1 for upper APA, 2 for lower APA, 3 for CRP
+    uint32 detector_type = 7; // 0 for WIB default, 1 for upper APA, 2 for lower APA, 3 for CRP
+
+    ConfigureWIBPulser wib_pulser = 8; // Configuration message if using WIB internal pulser
     
     //replies Status
 }
@@ -156,6 +178,13 @@ message Calibrate {
     
     //replies Status
 }
+
+// Recompile the software currently loaded on the WIB
+message Recompile {
+    
+    //replies Status
+}
+
 
 /** System control commands **/
 
