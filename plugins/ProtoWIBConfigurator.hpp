@@ -17,8 +17,8 @@
 #include "wibmod/WIB1/WIB.hh"
 #include "wibmod/protowibconfigurator/Nljs.hpp"
 
-#include <appfwk/DAQModule.hpp>
-#include <utilities/WorkerThread.hpp>
+#include "appfwk/DAQModule.hpp"
+#include "utilities/WorkerThread.hpp"
 
 #include <string>
 #include <memory>
@@ -44,7 +44,7 @@ public:
   ProtoWIBConfigurator(ProtoWIBConfigurator&&) = delete;                 ///< ProtoWIBConfigurator is not move-constructible
   ProtoWIBConfigurator& operator=(ProtoWIBConfigurator&&) = delete;      ///< ProtoWIBConfigurator is not move-assignable
 
-  void init(const data_t&) override;
+  void init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg) override;
 
 private:
   std::unique_ptr<WIB> wib;

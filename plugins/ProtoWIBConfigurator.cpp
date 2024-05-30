@@ -35,7 +35,7 @@ ProtoWIBConfigurator::ProtoWIBConfigurator(const std::string& name)
 }
 
 void
-ProtoWIBConfigurator::init(const data_t&)
+ProtoWIBConfigurator::init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg)
 {
 }
 
