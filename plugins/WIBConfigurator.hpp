@@ -18,8 +18,8 @@
 #include "wibmod/wibconfigurator/Nljs.hpp"
 #include "wib.pb.h"
 
-#include "appdal/WIBConf.hpp"
-#include "appdal/WIBSettings.hpp"
+#include "appmodel/WIBConf.hpp"
+#include "appmodel/WIBSettings.hpp"
 
 #include <appfwk/DAQModule.hpp>
 #include <utilities/WorkerThread.hpp>
@@ -54,8 +54,8 @@ private:
   std::unique_ptr<WIBCommon> wib;
 
   // Configuration
-  const appdal::WIBConf* m_wib_conf;
-  const appdal::WIBSettings* m_wib_settings;
+  const appmodel::WIBConf* m_wib_conf;
+  const appmodel::WIBSettings* m_wib_settings;
 
   // Commands
   void do_conf();
@@ -66,8 +66,8 @@ private:
   void do_scrap(const data_t&);
   
   // Helpers
-  void populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appdal::FEMBSettings* conf);
-  const appdal::FEMBSettings* femb_conf_i(size_t i);
+  void populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appmodel::FEMBSettings* conf);
+  const appmodel::FEMBSettings* femb_conf_i(size_t i);
 
 };
 

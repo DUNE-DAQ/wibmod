@@ -10,11 +10,11 @@
 
 #include "WIBConfigurator.hpp"
 
-#include "appdal/NetworkConnectionDescriptor.hpp"
-#include "appdal/NetworkConnectionRule.hpp"
-#include "appdal/WIBConf.hpp"
-#include "appdal/WIBSettings.hpp"
-#include "appdal/FEMBSettings.hpp"
+#include "appmodel/NetworkConnectionDescriptor.hpp"
+#include "appmodel/NetworkConnectionRule.hpp"
+#include "appmodel/WIBConf.hpp"
+#include "appmodel/WIBSettings.hpp"
+#include "appmodel/FEMBSettings.hpp"
 
 #include "wibmod/Issues.hpp"
 
@@ -43,7 +43,7 @@ WIBConfigurator::WIBConfigurator(const std::string& name)
 void
 WIBConfigurator::init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg)
 {
-  m_wib_conf = mcfg->module<appdal::WIBConf>(get_name());
+  m_wib_conf = mcfg->module<appmodel::WIBConf>(get_name());
   if (!m_wib_conf) {
     throw appfwk::CommandFailed(ERS_HERE, "init", get_name(), "Unable to retrieve configuration object");
   }
@@ -51,7 +51,7 @@ WIBConfigurator::init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg)
   do_conf();
 }
 
-const appdal::FEMBSettings* 
+const appmodel::FEMBSettings* 
 WIBConfigurator::femb_conf_i(size_t i)
 {
   switch(i) {
@@ -69,7 +69,7 @@ WIBConfigurator::femb_conf_i(size_t i)
 }
 
 void
-WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appdal::FEMBSettings* conf)
+WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appmodel::FEMBSettings* conf)
 {
   femb_conf->set_enabled(conf->get_enabled());
 
