@@ -12,6 +12,7 @@
 
 #include "appmodel/NetworkConnectionDescriptor.hpp"
 #include "appmodel/NetworkConnectionRule.hpp"
+#include "appmodel/WIBConfigurator.hpp"
 #include "appmodel/WIBConf.hpp"
 #include "appmodel/WIBSettings.hpp"
 #include "appmodel/FEMBSettings.hpp"
@@ -33,7 +34,7 @@ namespace wibmod {
 WIBConfigurator::WIBConfigurator(const std::string& name)
   : dunedaq::appfwk::DAQModule(name)
 {
-  //register_command("conf", &WIBConfigurator::do_conf);
+  register_command("conf", &WIBConfigurator::do_conf);
   //register_command("settings", &WIBConfigurator::do_settings);
   register_command("start", &WIBConfigurator::do_start);
   register_command("stop", &WIBConfigurator::do_stop);
@@ -43,12 +44,12 @@ WIBConfigurator::WIBConfigurator(const std::string& name)
 void
 WIBConfigurator::init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg)
 {
-  m_wib_conf = mcfg->module<appmodel::WIBConf>(get_name());
+  auto dal = mcfg->module<appmodel::WIBConfigurator>(get_name());
+  m_wib_conf = dal->get_conf(); //mcfg->module<appmodel::WIBConf>(get_name());
   if (!m_wib_conf) {
     throw appfwk::CommandFailed(ERS_HERE, "init", get_name(), "Unable to retrieve configuration object");
   }
   m_wib_settings = m_wib_conf->get_settings();
-  do_conf();
 }
 
 const appmodel::FEMBSettings* 
@@ -91,13 +92,13 @@ WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf,
 }
 
 void 
-WIBConfigurator::do_conf()
+WIBConfigurator::do_conf(const data_t& /*conf_as_json*/)
 {
-  TLOG_DEBUG(0) << "WIBConfigurator " << get_name() << " is " << m_wib_conf->get_wib_addr();
+  TLOG() << "WIBConfigurator " << get_name() << " is " << m_wib_conf->get_wib_addr();
 
   wib = std::unique_ptr<WIBCommon>(new WIBCommon(m_wib_conf->get_wib_addr()));
 
-  TLOG_DEBUG(0) << get_name() << " successfully initialized";
+  TLOG() << get_name() << " successfully initialized";
   
   check_timing();
 

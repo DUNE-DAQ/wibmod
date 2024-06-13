@@ -58,7 +58,7 @@ private:
   const appmodel::WIBSettings* m_wib_settings;
 
   // Commands
-  void do_conf();
+  void do_conf(const data_t&);
   void do_settings();
   void check_timing();
   void do_start(const data_t&);
