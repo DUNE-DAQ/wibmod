@@ -15,6 +15,8 @@
 #include "appmodel/WIBConfigurator.hpp"
 #include "appmodel/WIBConf.hpp"
 #include "appmodel/WIBSettings.hpp"
+#include "appmodel/WIBPulserSettings.hpp"
+#include "appmodel/ColdADCSettings.hpp"
 #include "appmodel/FEMBSettings.hpp"
 
 #include "wibmod/Issues.hpp"
@@ -90,20 +92,20 @@ WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf,
   femb_conf->set_strobe_delay(conf->get_strobe_delay());
   femb_conf->set_strobe_length(conf->get_strobe_length());
   
-  for (int i = 0; i < conf.line_driver.size(); i++) {
+  for (int i = 0; i < conf->get_line_driver().size(); i++) {
     if (i >= 2) {      
       TLOG() <<  "Warning: tried to pass more than 2 line driver values to FEMB configuration";
       break;
     }
-    femb_conf->add_line_driver(conf.line_driver.at(i));
+    femb_conf->add_line_driver(conf->get_line_driver().at(i));
   }
 
-  for (int i = 0; i < conf.pulse_channels.size(); i++) {
+  for (int i = 0; i < conf->get_pulse_channels().size(); i++) {
     if (i > 15) {
       TLOG() <<  "Warning: tried to pass more than 16 pulse_channel values to FEMB configuration";
       break;
     }
-    femb_conf->add_pulse_channels(conf.pulse_channels.at(i));
+    femb_conf->add_pulse_channels(conf->get_pulse_channels().at(i));
   }
 }
 
@@ -170,25 +172,27 @@ WIBConfigurator::do_settings()
   req.set_detector_type(m_wib_settings->get_detector_type());
 
   wib::ConfigureWIB::ConfigureCOLDADC* coldadc_conf = new wib::ConfigureWIB::ConfigureCOLDADC();
-  coldadc_conf->set_reg_0(conf.coldadc_settings.reg_0);
-  coldadc_conf->set_reg_4(conf.coldadc_settings.reg_4);
-  coldadc_conf->set_reg_24(conf.coldadc_settings.reg_24);
-  coldadc_conf->set_reg_25(conf.coldadc_settings.reg_25);
-  coldadc_conf->set_reg_26(conf.coldadc_settings.reg_26);
-  coldadc_conf->set_reg_27(conf.coldadc_settings.reg_27);
-  coldadc_conf->set_reg_29(conf.coldadc_settings.reg_29);
-  coldadc_conf->set_reg_30(conf.coldadc_settings.reg_30);
+  auto coldadc_settings = m_wib_settings->get_coldadc_settings();
+  coldadc_conf->set_reg_0(coldadc_settings->get_reg_0());
+  coldadc_conf->set_reg_4(coldadc_settings->get_reg_4());
+  coldadc_conf->set_reg_24(coldadc_settings->get_reg_24());
+  coldadc_conf->set_reg_25(coldadc_settings->get_reg_25());
+  coldadc_conf->set_reg_26(coldadc_settings->get_reg_26());
+  coldadc_conf->set_reg_27(coldadc_settings->get_reg_27());
+  coldadc_conf->set_reg_29(coldadc_settings->get_reg_29());
+  coldadc_conf->set_reg_30(coldadc_settings->get_reg_30());
   req.set_allocated_adc_conf(coldadc_conf);
   
   wib::ConfigureWIB::ConfigureWIBPulser* wib_pulser_conf = new wib::ConfigureWIB::ConfigureWIBPulser();
-  wib_pulser_conf->add_femb_en(conf.wib_pulser.enabled_0);
-  wib_pulser_conf->add_femb_en(conf.wib_pulser.enabled_1);
-  wib_pulser_conf->add_femb_en(conf.wib_pulser.enabled_2);
-  wib_pulser_conf->add_femb_en(conf.wib_pulser.enabled_3);
-  wib_pulser_conf->set_pulse_dac(conf.wib_pulser.pulse_dac);
-  wib_pulser_conf->set_pulse_period(conf.wib_pulser.pulse_period);
-  wib_pulser_conf->set_pulse_phase(conf.wib_pulser.pulse_phase);
-  wib_pulser_conf->set_pulse_duration(conf.wib_pulser.pulse_duration);
+  auto wib_pulser = m_wib_settings->get_wib_pulser();
+  wib_pulser_conf->add_femb_en(wib_pulser->get_enabled_0());
+  wib_pulser_conf->add_femb_en(wib_pulser->get_enabled_1());
+  wib_pulser_conf->add_femb_en(wib_pulser->get_enabled_2());
+  wib_pulser_conf->add_femb_en(wib_pulser->get_enabled_3());
+  wib_pulser_conf->set_pulse_dac(wib_pulser->get_pulse_dac());
+  wib_pulser_conf->set_pulse_period(wib_pulser->get_pulse_period());
+  wib_pulser_conf->set_pulse_phase(wib_pulser->get_pulse_phase());
+  wib_pulser_conf->set_pulse_duration(wib_pulser->get_pulse_duration());
   req.set_allocated_wib_pulser(wib_pulser_conf);
 
   for(size_t iFEMB = 0; iFEMB < 4; iFEMB++)
