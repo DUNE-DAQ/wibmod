@@ -13,7 +13,7 @@
 #include "appmodel/NetworkConnectionDescriptor.hpp"
 #include "appmodel/NetworkConnectionRule.hpp"
 #include "appmodel/WIBConfigurator.hpp"
-#include "appmodel/WIBConf.hpp"
+#include "appmodel/WIBModuleConf.hpp"
 #include "appmodel/WIBSettings.hpp"
 #include "appmodel/WIBPulserSettings.hpp"
 #include "appmodel/ColdADCSettings.hpp"
@@ -46,12 +46,12 @@ WIBConfigurator::WIBConfigurator(const std::string& name)
 void
 WIBConfigurator::init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg)
 {
-  auto dal = mcfg->module<appmodel::WIBConfigurator>(get_name());
-  m_wib_conf = dal->get_conf(); //mcfg->module<appmodel::WIBConf>(get_name());
+  m_wib_conf = mcfg->module<appmodel::WIBConfigurator>(get_name());
+  //m_wib_conf = dal->get_conf(); //mcfg->module<appmodel::WIBConf>(get_name());
   if (!m_wib_conf) {
     throw appfwk::CommandFailed(ERS_HERE, "init", get_name(), "Unable to retrieve configuration object");
   }
-  m_wib_settings = m_wib_conf->get_settings();
+  m_wib_settings = m_wib_conf->get_conf();
 }
 
 const appmodel::FEMBSettings* 

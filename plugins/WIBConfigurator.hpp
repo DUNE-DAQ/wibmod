@@ -15,10 +15,10 @@
 #define WIBMOD_PLUGINS_WIBCONFIGURATOR_HPP_
 
 #include "wibmod/WIBCommon.hpp"
-#include "wibmod/wibconfigurator/Nljs.hpp"
+//#include "wibmod/wibconfigurator/Nljs.hpp"
 #include "wib.pb.h"
 
-#include "appmodel/WIBConf.hpp"
+#include "appmodel/WIBConfigurator.hpp"
 #include "appmodel/WIBSettings.hpp"
 
 #include <appfwk/DAQModule.hpp>
@@ -54,7 +54,7 @@ private:
   std::unique_ptr<WIBCommon> wib;
 
   // Configuration
-  const appmodel::WIBConf* m_wib_conf;
+  const appmodel::WIBConfigurator* m_wib_conf;
   const appmodel::WIBSettings* m_wib_settings;
 
   // Commands
