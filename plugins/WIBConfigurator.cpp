@@ -10,6 +10,15 @@
 
 #include "WIBConfigurator.hpp"
 
+#include "appmodel/NetworkConnectionDescriptor.hpp"
+#include "appmodel/NetworkConnectionRule.hpp"
+#include "appmodel/WIBConfigurator.hpp"
+#include "appmodel/WIBModuleConf.hpp"
+#include "appmodel/WIBSettings.hpp"
+#include "appmodel/WIBPulserSettings.hpp"
+#include "appmodel/ColdADCSettings.hpp"
+#include "appmodel/FEMBSettings.hpp"
+
 #include "wibmod/Issues.hpp"
 
 #include "logging/Logging.hpp"
@@ -28,71 +37,90 @@ WIBConfigurator::WIBConfigurator(const std::string& name)
   : dunedaq::appfwk::DAQModule(name)
 {
   register_command("conf", &WIBConfigurator::do_conf);
-  register_command("settings", &WIBConfigurator::do_settings);
+  //register_command("settings", &WIBConfigurator::do_settings);
   register_command("start", &WIBConfigurator::do_start);
   register_command("stop", &WIBConfigurator::do_stop);
   register_command("scrap", &WIBConfigurator::do_scrap);
 }
 
 void
-WIBConfigurator::init(const data_t&)
+WIBConfigurator::init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg)
 {
+  m_wib_conf = mcfg->module<appmodel::WIBConfigurator>(get_name());
+  //m_wib_conf = dal->get_conf(); //mcfg->module<appmodel::WIBConf>(get_name());
+  if (!m_wib_conf) {
+    throw appfwk::CommandFailed(ERS_HERE, "init", get_name(), "Unable to retrieve configuration object");
+  }
+  m_wib_settings = m_wib_conf->get_conf();
 }
 
-const wibconfigurator::FEMBSettings & 
-WIBConfigurator::femb_conf_i(const wibconfigurator::WIBSettings &conf, size_t i)
+const appmodel::FEMBSettings* 
+WIBConfigurator::femb_conf_i(size_t i)
 {
   switch(i) {
     case 0:
-      return conf.femb0;
+      return m_wib_settings->get_femb0();
     case 1:
-      return conf.femb1;
+      return m_wib_settings->get_femb1();
     case 2:
-      return conf.femb2;
+      return m_wib_settings->get_femb2();
     case 3:
-      return conf.femb3;
+      return m_wib_settings->get_femb3();
     default:
       throw UnreachableError(ERS_HERE, get_name());
   }
 }
 
 void
-WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const wibconfigurator::FEMBSettings &conf)
+WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appmodel::FEMBSettings* conf)
 {
-  femb_conf->set_enabled(conf.enabled);
+  femb_conf->set_enabled(conf->get_enabled());
 
-  femb_conf->set_test_cap(conf.test_cap != 0);
-  femb_conf->set_gain(conf.gain);
-  femb_conf->set_peak_time(conf.peak_time);
-  femb_conf->set_baseline(conf.baseline);
-  femb_conf->set_pulse_dac(conf.pulse_dac);
-  femb_conf->set_gain_match(conf.gain_match);
+  femb_conf->set_test_cap(conf->get_test_cap() != 0);
+  femb_conf->set_gain(conf->get_gain());
+  femb_conf->set_peak_time(conf->get_peak_time());
+  femb_conf->set_baseline(conf->get_baseline());
+  femb_conf->set_pulse_dac(conf->get_pulse_dac());
+  femb_conf->set_gain_match(conf->get_gain_match());
 
-  femb_conf->set_leak(conf.leak);
-  femb_conf->set_leak_10x(conf.leak_10x != 0);
-  femb_conf->set_ac_couple(conf.ac_couple);
-  femb_conf->set_buffer(conf.buffering);
+  femb_conf->set_leak(conf->get_leak());
+  femb_conf->set_leak_10x(conf->get_leak_10x() != 0);
+  femb_conf->set_ac_couple(conf->get_ac_couple());
+  femb_conf->set_buffer(conf->get_buffering());
 
-  femb_conf->set_strobe_skip(conf.strobe_skip);
-  femb_conf->set_strobe_delay(conf.strobe_delay);
-  femb_conf->set_strobe_length(conf.strobe_length);
+  femb_conf->set_strobe_skip(conf->get_strobe_skip());
+  femb_conf->set_strobe_delay(conf->get_strobe_delay());
+  femb_conf->set_strobe_length(conf->get_strobe_length());
+  
+  for (int i = 0; i < conf->get_line_driver().size(); i++) {
+    if (i >= 2) {      
+      TLOG() <<  "Warning: tried to pass more than 2 line driver values to FEMB configuration";
+      break;
+    }
+    femb_conf->add_line_driver(conf->get_line_driver().at(i));
+  }
+
+  for (int i = 0; i < conf->get_pulse_channels().size(); i++) {
+    if (i > 15) {
+      TLOG() <<  "Warning: tried to pass more than 16 pulse_channel values to FEMB configuration";
+      break;
+    }
+    femb_conf->add_pulse_channels(conf->get_pulse_channels().at(i));
+  }
 }
 
 void 
-WIBConfigurator::do_conf(const data_t& payload)
+WIBConfigurator::do_conf(const data_t& /*conf_as_json*/)
 {
+  TLOG() << "WIBConfigurator " << get_name() << " is " << m_wib_conf->get_wib_addr();
 
-  const wibconfigurator::WIBConf &conf = payload.get<wibconfigurator::WIBConf>();
+  wib = std::unique_ptr<WIBCommon>(new WIBCommon(m_wib_conf->get_wib_addr()));
 
-  TLOG_DEBUG(0) << "WIBConfigurator " << get_name() << " is " << conf.wib_addr;
-
-  wib = std::unique_ptr<WIBCommon>(new WIBCommon(conf.wib_addr));
-
-  TLOG_DEBUG(0) << get_name() << " successfully initialized";
+  TLOG() << get_name() << " successfully initialized";
   
   check_timing();
 
-  do_settings(conf.settings);
+  do_settings();
 
   check_timing();
 }
@@ -133,23 +161,45 @@ WIBConfigurator::check_timing()
 
 }
 void
-WIBConfigurator::do_settings(const data_t& payload)
+WIBConfigurator::do_settings()
 {
-
   TLOG() << "Building WIB config for " << get_name();
-  const wibconfigurator::WIBSettings &conf = payload.get<wibconfigurator::WIBSettings>();
-  
+ 
   wib::ConfigureWIB req;
-  req.set_cold(conf.cold);
-  req.set_pulser(conf.pulser);
-  req.set_adc_test_pattern(conf.adc_test_pattern);
-  req.set_detector_type(conf.detector_type);
+  req.set_cold(m_wib_settings->get_cold());
+  req.set_pulser(m_wib_settings->get_pulser());
+  req.set_adc_test_pattern(m_wib_settings->get_adc_test_pattern());
+  req.set_detector_type(m_wib_settings->get_detector_type());
+
+  wib::ConfigureWIB::ConfigureCOLDADC* coldadc_conf = new wib::ConfigureWIB::ConfigureCOLDADC();
+  auto coldadc_settings = m_wib_settings->get_coldadc_settings();
+  coldadc_conf->set_reg_0(coldadc_settings->get_reg_0());
+  coldadc_conf->set_reg_4(coldadc_settings->get_reg_4());
+  coldadc_conf->set_reg_24(coldadc_settings->get_reg_24());
+  coldadc_conf->set_reg_25(coldadc_settings->get_reg_25());
+  coldadc_conf->set_reg_26(coldadc_settings->get_reg_26());
+  coldadc_conf->set_reg_27(coldadc_settings->get_reg_27());
+  coldadc_conf->set_reg_29(coldadc_settings->get_reg_29());
+  coldadc_conf->set_reg_30(coldadc_settings->get_reg_30());
+  req.set_allocated_adc_conf(coldadc_conf);
+  
+  wib::ConfigureWIB::ConfigureWIBPulser* wib_pulser_conf = new wib::ConfigureWIB::ConfigureWIBPulser();
+  auto wib_pulser = m_wib_settings->get_wib_pulser();
+  wib_pulser_conf->add_femb_en(wib_pulser->get_enabled_0());
+  wib_pulser_conf->add_femb_en(wib_pulser->get_enabled_1());
+  wib_pulser_conf->add_femb_en(wib_pulser->get_enabled_2());
+  wib_pulser_conf->add_femb_en(wib_pulser->get_enabled_3());
+  wib_pulser_conf->set_pulse_dac(wib_pulser->get_pulse_dac());
+  wib_pulser_conf->set_pulse_period(wib_pulser->get_pulse_period());
+  wib_pulser_conf->set_pulse_phase(wib_pulser->get_pulse_phase());
+  wib_pulser_conf->set_pulse_duration(wib_pulser->get_pulse_duration());
+  req.set_allocated_wib_pulser(wib_pulser_conf);
 
   for(size_t iFEMB = 0; iFEMB < 4; iFEMB++)
   {
     TLOG() << "Building FEMB " << iFEMB << " config for " << get_name();
     wib::ConfigureWIB::ConfigureFEMB *femb_conf = req.add_fembs();
-    populate_femb_conf(femb_conf,femb_conf_i(conf,iFEMB));
+    populate_femb_conf(femb_conf, femb_conf_i(iFEMB));
   }
 
   TLOG() << "Sending WIB configuration to " << get_name();
