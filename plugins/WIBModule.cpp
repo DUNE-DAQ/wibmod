@@ -1,5 +1,5 @@
 /**
- * @file WIBConfigurator.cpp WIBConfigurator class implementation
+ * @file WIBModule.cpp WIBModule class implementation
  *
  * Based on DataGenerator by Kurt Biery
  *
@@ -8,11 +8,11 @@
  * received with this code.
  */
 
-#include "WIBConfigurator.hpp"
+#include "WIBModule.hpp"
 
 #include "appmodel/NetworkConnectionDescriptor.hpp"
 #include "appmodel/NetworkConnectionRule.hpp"
-#include "appmodel/WIBConfigurator.hpp"
+#include "appmodel/WIBModule.hpp"
 #include "appmodel/WIBModuleConf.hpp"
 #include "appmodel/WIBSettings.hpp"
 #include "appmodel/WIBPulserSettings.hpp"
@@ -28,25 +28,25 @@
 /**
  * @brief Name used by TRACE TLOG calls from this source file
  */
-#define TRACE_NAME "WIBConfigurator"             // NOLINT
+#define TRACE_NAME "WIBModule"             // NOLINT
 
 namespace dunedaq {
 namespace wibmod {
 
-WIBConfigurator::WIBConfigurator(const std::string& name)
+WIBModule::WIBModule(const std::string& name)
   : dunedaq::appfwk::DAQModule(name)
 {
-  register_command("conf", &WIBConfigurator::do_conf);
-  //register_command("settings", &WIBConfigurator::do_settings);
-  register_command("start", &WIBConfigurator::do_start);
-  register_command("stop", &WIBConfigurator::do_stop);
-  register_command("scrap", &WIBConfigurator::do_scrap);
+  register_command("conf", &WIBModule::do_conf);
+  //register_command("settings", &WIBModule::do_settings);
+  register_command("start", &WIBModule::do_start);
+  register_command("stop", &WIBModule::do_stop);
+  register_command("scrap", &WIBModule::do_scrap);
 }
 
 void
-WIBConfigurator::init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg)
+WIBModule::init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg)
 {
-  m_wib_conf = mcfg->module<appmodel::WIBConfigurator>(get_name());
+  m_wib_conf = mcfg->module<appmodel::WIBModule>(get_name());
   //m_wib_conf = dal->get_conf(); //mcfg->module<appmodel::WIBConf>(get_name());
   if (!m_wib_conf) {
     throw appfwk::CommandFailed(ERS_HERE, "init", get_name(), "Unable to retrieve configuration object");
@@ -55,7 +55,7 @@ WIBConfigurator::init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg)
 }
 
 const appmodel::FEMBSettings* 
-WIBConfigurator::femb_conf_i(size_t i)
+WIBModule::femb_conf_i(size_t i)
 {
   switch(i) {
     case 0:
@@ -72,7 +72,7 @@ WIBConfigurator::femb_conf_i(size_t i)
 }
 
 void
-WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appmodel::FEMBSettings* conf)
+WIBModule::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appmodel::FEMBSettings* conf)
 {
   femb_conf->set_enabled(conf->get_enabled());
 
@@ -110,9 +110,9 @@ WIBConfigurator::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf,
 }
 
 void 
-WIBConfigurator::do_conf(const data_t& /*conf_as_json*/)
+WIBModule::do_conf(const data_t& /*conf_as_json*/)
 {
-  TLOG() << "WIBConfigurator " << get_name() << " is " << m_wib_conf->get_wib_addr();
+  TLOG() << "WIBModule " << get_name() << " is " << m_wib_conf->get_wib_addr();
 
   wib = std::unique_ptr<WIBCommon>(new WIBCommon(m_wib_conf->get_wib_addr()));
 
@@ -126,7 +126,7 @@ WIBConfigurator::do_conf(const data_t& /*conf_as_json*/)
 }
 
 void
-WIBConfigurator::check_timing()
+WIBModule::check_timing()
 {
 
   TLOG_DEBUG(0) << get_name() << " Checking timing status";
@@ -161,7 +161,7 @@ WIBConfigurator::check_timing()
 
 }
 void
-WIBConfigurator::do_settings()
+WIBModule::do_settings()
 {
   TLOG() << "Building WIB config for " << get_name();
  
@@ -218,19 +218,19 @@ WIBConfigurator::do_settings()
 }
 
 void
-WIBConfigurator::do_start(const data_t&)
+WIBModule::do_start(const data_t&)
 {
   TLOG_DEBUG(0) << get_name() << " successfully started";
 }
 
 void
-WIBConfigurator::do_stop(const data_t&)
+WIBModule::do_stop(const data_t&)
 {
   TLOG_DEBUG(0) << get_name() << " successfully stopped";
 }
 
 void
-WIBConfigurator::do_scrap(const data_t&)
+WIBModule::do_scrap(const data_t&)
 {
   wib = NULL;
   TLOG_DEBUG(0) << get_name() << " successfully scrapped";
@@ -240,4 +240,4 @@ WIBConfigurator::do_scrap(const data_t&)
 } // namespace wibmod
 } // namespace dunedaq
 
-DEFINE_DUNE_DAQ_MODULE(dunedaq::wibmod::WIBConfigurator)
+DEFINE_DUNE_DAQ_MODULE(dunedaq::wibmod::WIBModule)
