@@ -27,7 +27,7 @@ def get_wib_app(nickname,
                 wib_pulser_en, wib_pulser_dac, wib_pulser_period, wib_pulser_phase, wib_pulser_duration,
                 host="localhost"):
     '''
-    Here an entire application consisting only of one (Proto)WIBConfigurator module is generated. 
+    Here an entire application consisting only of one (Proto)WIBModule module is generated. 
     '''
 
     # Define modules
@@ -53,7 +53,7 @@ def get_wib_app(nickname,
             coldadc_inputs[coldadc_regs[idx]] = val
         print(coldadc_inputs)
         modules += [DAQModule(name = nickname,
-                             plugin = 'WIBConfigurator',
+                             plugin = 'WIBModule',
                              conf = wib.WIBConf(wib_addr = endpoint,
                                  settings = wib.WIBSettings(
                                      pulser = pulser,

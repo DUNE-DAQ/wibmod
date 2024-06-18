@@ -27,7 +27,7 @@ daq_add_library( wib.pb *.cpp WIB1/*.cpp WIB1/BUException/*.cpp LINK_LIBRARIES $
 
 #daq_codegen(*wibconfigurator.jsonnet TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 )
 
-daq_add_plugin( WIBConfigurator duneDAQModule LINK_LIBRARIES wibmod )
+daq_add_plugin( WIBModule duneDAQModule LINK_LIBRARIES wibmod )
 
 #daq_add_plugin( ProtoWIBConfigurator duneDAQModule LINK_LIBRARIES wibmod )
 

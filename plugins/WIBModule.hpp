@@ -1,7 +1,7 @@
 /**
- * @file WIBConfigurator.hpp
+ * @file WIBModule.hpp
  *
- * WIBConfigurator is a simple DAQModule implementation that provides a
+ * WIBModule is a simple DAQModule implementation that provides a
  * configuration and monitoring interface to the WIB2
  *
  * Based on DataGenerator by Kurt Biery
@@ -18,7 +18,7 @@
 //#include "wibmod/wibconfigurator/Nljs.hpp"
 #include "wib.pb.h"
 
-#include "appmodel/WIBConfigurator.hpp"
+#include "appmodel/WIBModule.hpp"
 #include "appmodel/WIBSettings.hpp"
 
 #include <appfwk/DAQModule.hpp>
@@ -31,22 +31,22 @@ namespace dunedaq {
 namespace wibmod {
 
 /**
- * @brief WIBConfigurator is a simple DAQModule implementation that provides a
+ * @brief WIBModule is a simple DAQModule implementation that provides a
  * configuration and monitoring interface to the WIB
  */
-class WIBConfigurator : public dunedaq::appfwk::DAQModule
+class WIBModule : public dunedaq::appfwk::DAQModule
 {
 public:
   /**
-   * @brief WIBConfigurator Constructor
-   * @param name Instance name for this WIBConfigurator instance
+   * @brief WIBModule Constructor
+   * @param name Instance name for this WIBModule instance
    */
-  explicit WIBConfigurator(const std::string& name);
+  explicit WIBModule(const std::string& name);
 
-  WIBConfigurator(const WIBConfigurator&) = delete;            ///< WIBConfigurator is not copy-constructible
-  WIBConfigurator& operator=(const WIBConfigurator&) = delete; ///< WIBConfigurator is not copy-assignable
-  WIBConfigurator(WIBConfigurator&&) = delete;                 ///< WIBConfigurator is not move-constructible
-  WIBConfigurator& operator=(WIBConfigurator&&) = delete;      ///< WIBConfigurator is not move-assignable
+  WIBModule(const WIBModule&) = delete;            ///< WIBModule is not copy-constructible
+  WIBModule& operator=(const WIBModule&) = delete; ///< WIBModule is not copy-assignable
+  WIBModule(WIBModule&&) = delete;                 ///< WIBModule is not move-constructible
+  WIBModule& operator=(WIBModule&&) = delete;      ///< WIBModule is not move-assignable
 
   void init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg) override;
 
@@ -54,7 +54,7 @@ private:
   std::unique_ptr<WIBCommon> wib;
 
   // Configuration
-  const appmodel::WIBConfigurator* m_wib_conf;
+  const appmodel::WIBModule* m_wib_conf;
   const appmodel::WIBSettings* m_wib_settings;
 
   // Commands
