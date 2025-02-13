@@ -44,10 +44,10 @@ WIBModule::WIBModule(const std::string& name)
 }
 
 void
-WIBModule::init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg)
+WIBModule::init(std::shared_ptr<appfwk::ConfigurationManager> mcfg)
 {
-  m_wib_conf = mcfg->module<appmodel::WIBModule>(get_name());
-  //m_wib_conf = dal->get_conf(); //mcfg->module<appmodel::WIBConf>(get_name());
+  m_wib_conf = mcfg->get_dal<appmodel::WIBModule>(get_name());
+  //m_wib_conf = dal->get_conf(); //mcfg->get_dal<appmodel::WIBConf>(get_name());
   if (!m_wib_conf) {
     throw appfwk::CommandFailed(ERS_HERE, "init", get_name(), "Unable to retrieve configuration object");
   }

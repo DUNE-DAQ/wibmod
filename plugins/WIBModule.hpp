@@ -48,7 +48,7 @@ public:
   WIBModule(WIBModule&&) = delete;                 ///< WIBModule is not move-constructible
   WIBModule& operator=(WIBModule&&) = delete;      ///< WIBModule is not move-assignable
 
-  void init(std::shared_ptr<appfwk::ModuleConfiguration> mcfg) override;
+  void init(std::shared_ptr<appfwk::ConfigurationManager> mcfg) override;
 
 private:
   std::unique_ptr<WIBCommon> wib;
