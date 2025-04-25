@@ -74,7 +74,7 @@ WIBModule::femb_conf_i(size_t i)
 void
 WIBModule::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appmodel::FEMBSettings* conf)
 {
-  femb_conf->set_enabled(conf->get_enabled());
+  // femb_conf->set_enabled(conf->get_enabled());
 
   femb_conf->set_test_cap(conf->get_test_cap() != 0);
   femb_conf->set_gain(conf->get_gain());
@@ -195,12 +195,22 @@ WIBModule::do_settings()
   wib_pulser_conf->set_pulse_duration(wib_pulser->get_pulse_duration());
   req.set_allocated_wib_pulser(wib_pulser_conf);
 
+  // Use a bool array for convenience
+  bool femb_enabled[4] = {
+    m_wib_settings->get_femb0_enabled(),
+    m_wib_settings->get_femb1_enabled(),
+    m_wib_settings->get_femb2_enabled(),
+    m_wib_settings->get_femb3_enabled(),
+  };
+
   for(size_t iFEMB = 0; iFEMB < 4; iFEMB++)
   {
     TLOG() << "Building FEMB " << iFEMB << " config for " << get_name();
     wib::ConfigureWIB::ConfigureFEMB *femb_conf = req.add_fembs();
     populate_femb_conf(femb_conf, femb_conf_i(iFEMB));
+    femb_conf->set_enabled(femb_enabled[i]);
   }
+
 
   TLOG() << "Sending WIB configuration to " << get_name();
   wib::Status rep;
