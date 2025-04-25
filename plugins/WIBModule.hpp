@@ -68,6 +68,7 @@ private:
   // Helpers
   void populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appmodel::FEMBSettings* conf);
   const appmodel::FEMBSettings* femb_conf_i(size_t i);
+  bool femb_enabled_i(size_t i);
 
 };
 
