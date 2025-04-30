@@ -47,7 +47,6 @@ void
 WIBModule::init(std::shared_ptr<appfwk::ConfigurationManager> mcfg)
 {
   m_wib_conf = mcfg->get_dal<appmodel::WIBModule>(get_name());
-  //m_wib_conf = dal->get_conf(); //mcfg->get_dal<appmodel::WIBConf>(get_name());
   if (!m_wib_conf) {
     throw appfwk::CommandFailed(ERS_HERE, "init", get_name(), "Unable to retrieve configuration object");
   }
@@ -66,6 +65,23 @@ WIBModule::femb_conf_i(size_t i)
       return m_wib_settings->get_femb2();
     case 3:
       return m_wib_settings->get_femb3();
+    default:
+      throw UnreachableError(ERS_HERE, get_name());
+  }
+}
+
+bool
+WIBModule::femb_enabled_i(size_t i)
+{
+  switch(i) {
+    case 0:
+      return m_wib_conf->get_enabled_femb0();
+    case 1:
+      return m_wib_conf->get_enabled_femb1();
+    case 2:
+      return m_wib_conf->get_enabled_femb2();
+    case 3:
+      return m_wib_conf->get_enabled_femb3();
     default:
       throw UnreachableError(ERS_HERE, get_name());
   }
@@ -200,7 +216,9 @@ WIBModule::do_settings()
     TLOG() << "Building FEMB " << iFEMB << " config for " << get_name();
     wib::ConfigureWIB::ConfigureFEMB *femb_conf = req.add_fembs();
     populate_femb_conf(femb_conf, femb_conf_i(iFEMB));
+    femb_conf->set_enabled(femb_conf->enabled() and this->femb_enabled_i(iFEMB));
   }
+
 
   TLOG() << "Sending WIB configuration to " << get_name();
   wib::Status rep;
