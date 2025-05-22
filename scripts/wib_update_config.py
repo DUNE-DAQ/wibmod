@@ -10,7 +10,7 @@ import click
 @click.option('--pulser', is_flag=True, help='Enable pulser (otherwise, disable)')
 @click.option('--femb-mask', type=str,
               default='0xF', help='FEMB mask for changes (default=0xF, apply to all)')
-@click.option('--pulser-dac','-p', default=20, help='Pulser DAC value (default=15)')
+@click.option('--pulser-dac','-p', default=20, help='Pulser DAC value (default=20)')
 @click.option('--pulser-channel-mask', type=str,
               default='0xFFFF', help='Pulser channel mask (default=0xFFFF, all on)')
 @click.option('--gain', '-g', default=2,
