@@ -18,7 +18,7 @@ import click
 @click.option('--peak-time', '-s', default=3,
               help = 'Peak time (shaping) setting [1, 0.5, 3, 2 us]-->[0,1,2,3] (default=3, 2 us)')
 
-def main(conf_db,pulser,femb_mask,pulser_dac,pulser_channel_mask,gain,peak_time):
+def wib_update_config(conf_db,pulser,femb_mask,pulser_dac,pulser_channel_mask,gain,peak_time):
 
     femb_mask = int(femb_mask,0)
     pulser_channel_mask = int(pulser_channel_mask,0)
@@ -53,4 +53,4 @@ def main(conf_db,pulser,femb_mask,pulser_dac,pulser_channel_mask,gain,peak_time)
     db.commit()
 
 if __name__ == '__main__':
-    main()
+    wib_update_config()
