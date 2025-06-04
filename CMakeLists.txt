@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(wibmod VERSION 2.0.2)
+project(wibmod VERSION 2.1.0)
 
 find_package(daq-cmake REQUIRED)
 
@@ -8,6 +8,7 @@ daq_setup_environment()
 find_package(ers REQUIRED)
 #find_package(serialization REQUIRED)
 find_package(logging REQUIRED)
+find_package(conffwk REQUIRED)
 find_package(appfwk REQUIRED)
 find_package(cppzmq REQUIRED)
 find_package(Protobuf REQUIRED)
