@@ -19,12 +19,13 @@ def update_settings(oks_session_file, dac, baseline, gain_match, gain, peak_time
     db = conffwk.Configuration("oksconflibs:"+oks_session_file)
 
     femb = db.get_dals("FEMBSettings")
-    femb[0].pulse_dac = dac
-    femb[0].baseline = baseline
-    femb[0].gain_match = gain_match
-    femb[0].gain = gain
-    femb[0].peak_time = peak_time
-    db.update_dal(femb[0])
+    for f in femb:
+        f.pulse_dac = dac
+        f.baseline = baseline
+        f.gain_match = gain_match
+        f.gain = gain
+        f.peak_time = peak_time
+        db.update_dal(f)
 
     db.commit()
 
