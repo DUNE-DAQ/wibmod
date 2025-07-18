@@ -14,7 +14,7 @@ import conffwk
               help="Gain for all channels (0-3: 14, 25, 7.8, 4.7 mV/fC)")
 @click.option('--peak_time', '-p', type=int, default=3,
               help="Shaping time for all channels (0-3: 1, 0.5, 3, 2 us)")
-@click.argument('oks_session_file', type=click.Path(exists=True, dir_okay=False, writable=True))
+@click.argument('oks_session_file', type=click.Path(exists=True, dir_okay=False, writable=True)) # Usually defaults/wiecconfs.data.xml
 def update_settings(oks_session_file, dac, baseline, gain_match, gain, peak_time):
     db = conffwk.Configuration("oksconflibs:"+oks_session_file)
 
