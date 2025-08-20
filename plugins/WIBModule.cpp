@@ -126,7 +126,7 @@ WIBModule::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const
 }
 
 void 
-WIBModule::do_conf(const data_t& /*conf_as_json*/)
+WIBModule::do_conf(const CommandData_t& /*conf_as_json*/)
 {
   TLOG() << "WIBModule " << get_name() << " is " << m_wib_conf->get_wib_addr();
 
@@ -236,19 +236,19 @@ WIBModule::do_settings()
 }
 
 void
-WIBModule::do_start(const data_t&)
+WIBModule::do_start(const CommandData_t&)
 {
   TLOG_DEBUG(0) << get_name() << " successfully started";
 }
 
 void
-WIBModule::do_stop(const data_t&)
+WIBModule::do_stop(const CommandData_t&)
 {
   TLOG_DEBUG(0) << get_name() << " successfully stopped";
 }
 
 void
-WIBModule::do_scrap(const data_t&)
+WIBModule::do_scrap(const CommandData_t&)
 {
   wib = NULL;
   TLOG_DEBUG(0) << get_name() << " successfully scrapped";
