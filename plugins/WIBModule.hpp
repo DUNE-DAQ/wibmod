@@ -58,12 +58,12 @@ private:
   const appmodel::WIBSettings* m_wib_settings;
 
   // Commands
-  void do_conf(const data_t&);
+  void do_conf(const CommandData_t&);
   void do_settings();
   void check_timing();
-  void do_start(const data_t&);
-  void do_stop(const data_t&);
-  void do_scrap(const data_t&);
+  void do_start(const CommandData_t&);
+  void do_stop(const CommandData_t&);
+  void do_scrap(const CommandData_t&);
   
   // Helpers
   void populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appmodel::FEMBSettings* conf);
