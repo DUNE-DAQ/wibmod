@@ -56,10 +56,11 @@ WIBCommon::send_command(const C &msg, R &repl)
   
   zmq::message_t request(cmd_str.size());
   memcpy(static_cast<void*>(request.data()), cmd_str.c_str(), cmd_str.size());
-  socket.send(request);
+  socket.send(request, zmq::send_flags::none);
   
   zmq::message_t reply;
-  socket.recv(&reply);
+  auto res = socket.recv(reply);
+  TLOG_DEBUG(12) << "Recv res=" << res.value_or(0);
   
   std::string reply_str(static_cast<char*>(reply.data()), reply.size());
   repl.ParseFromString(reply_str);
