@@ -8,7 +8,7 @@ import conffwk
               help="DAC value for pulsers (0-63)")
 @click.option('--baseline', '-b', type=int, default=2,
               help="Baseline for all channels (0: high, 1: low, 2: mixed)")
-@click.option('--gain_match', '-g', type=bool, default=True,
+@click.option('--gain_match', '-m', type=bool, default=True,
               help="Gain matching for pulser response")
 @click.option('--gain', '-g', type=int, default=2,
               help="Gain for all channels (0-3: 14, 25, 7.8, 4.7 mV/fC)")
