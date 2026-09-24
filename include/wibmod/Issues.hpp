@@ -13,8 +13,8 @@
 #include "ers/Issue.hpp"
 #include "logging/Logging.hpp" // NOTE: if ISSUES ARE DECLARED BEFORE include logging/Logging.hpp, TLOG_DEBUG<<issue wont work.
 
-#include <string>
 #include <iomanip>
+#include <string>
 
 // NOLINTNEXTLINE(build/define_used)
 #define TLVL_ENTER_EXIT_METHODS 10
@@ -31,14 +31,14 @@ ERS_DECLARE_ISSUE_BASE(wibmod,
                        "An unreachable part of the code has been reached.",
                        ((std::string)name),
                        ERS_EMPTY)
-                       
+
 ERS_DECLARE_ISSUE_BASE(wibmod,
                        ConfigurationFailed,
                        appfwk::GeneralDAQModuleIssue,
                        "WIB " << name << " failed to configure. Additional information: " << info,
                        ((std::string)name),
                        ((std::string)info))
-                               
+
 // WIB1 Issues
 
 ERS_DECLARE_ISSUE_BASE(wibmod,
@@ -53,7 +53,7 @@ ERS_DECLARE_ISSUE_BASE(wibmod,
                        appfwk::GeneralDAQModuleIssue,
                        "WIB Firmware setup in " << fw_mode << " readout mode but configure expects " << fw_expect,
                        ((std::string)name),
-                       ((std::string)fw_mode) ((std::string)fw_expect) )
+                       ((std::string)fw_mode)((std::string)fw_expect))
 
 ERS_DECLARE_ISSUE_BASE(wibmod,
                        UnknownFirmwareMode,
@@ -65,15 +65,11 @@ ERS_DECLARE_ISSUE_BASE(wibmod,
 ERS_DECLARE_ISSUE_BASE(wibmod,
                        IncorrectFirmwareVersion,
                        appfwk::GeneralDAQModuleIssue,
-                       type << " firmware version is "
-                            << std::hex << std::setw(8) << std::setfill('0')
-                            << fw_version
-                            <<" but expected "
-                            << std::hex << std::setw(8) << std::setfill('0')
-                            << expected_fw_version
-                            <<" version",
+                       type << " firmware version is " << std::hex << std::setw(8) << std::setfill('0') << fw_version
+                            << " but expected " << std::hex << std::setw(8) << std::setfill('0') << expected_fw_version
+                            << " version",
                        ((std::string)name),
-                       ((std::string)type) ((uint32_t)fw_version) ((uint32_t)expected_fw_version))
+                       ((std::string)type)((uint32_t)fw_version)((uint32_t)expected_fw_version))
 
 ERS_DECLARE_ISSUE_BASE(wibmod,
                        BadDuplicationMode,
@@ -81,7 +77,7 @@ ERS_DECLARE_ISSUE_BASE(wibmod,
                        "WIB is set to duplicate data from links 1 and 2 to 3 and 4. This shouldn't happen!",
                        ((std::string)name),
                        ERS_EMPTY)
-                       
+
 ERS_DECLARE_ISSUE_BASE(wibmod,
                        WIBCommunicationError,
                        appfwk::GeneralDAQModuleIssue,
@@ -94,22 +90,22 @@ ERS_DECLARE_ISSUE_BASE(wibmod,
                        appfwk::GeneralDAQModuleIssue,
                        "Unhandled BUException: " << what << " : " << description,
                        ((std::string)name),
-                       ((std::string)what) ((std::string)description))
-                       
+                       ((std::string)what)((std::string)description))
+
 ERS_DECLARE_ISSUE_BASE(wibmod,
                        InvalidFEMBSetting,
                        appfwk::GeneralDAQModuleIssue,
                        message,
                        ((std::string)name),
                        ((std::string)message))
-                       
+
 ERS_DECLARE_ISSUE_BASE(wibmod,
                        CommandFailed,
                        appfwk::GeneralDAQModuleIssue,
                        message,
                        ((std::string)name),
                        ((std::string)message))
-                       
+
 ERS_DECLARE_ISSUE_BASE(wibmod,
                        CannotReadFromFEMB,
                        appfwk::GeneralDAQModuleIssue,
@@ -117,16 +113,9 @@ ERS_DECLARE_ISSUE_BASE(wibmod,
                        ((std::string)name),
                        ((std::string)message))
 
-ERS_DECLARE_ISSUE(wibmod,
-                       WaitingForAlignment,
-                       "Waiting for alignment constants from PDTS",
-                       ERS_EMPTY)
+ERS_DECLARE_ISSUE(wibmod, WaitingForAlignment, "Waiting for alignment constants from PDTS", ERS_EMPTY)
 
-ERS_DECLARE_ISSUE(wibmod,
-                       WaitingForTimestamp,
-                       "Waiting for timestamp from PDTS",
-                       ERS_EMPTY)
-
+ERS_DECLARE_ISSUE(wibmod, WaitingForTimestamp, "Waiting for timestamp from PDTS", ERS_EMPTY)
 
 } // namespace dunedaq
 
