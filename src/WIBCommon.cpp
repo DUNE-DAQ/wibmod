@@ -17,9 +17,9 @@
 namespace dunedaq {
 namespace wibmod {
 
-WIBCommon::WIBCommon(const std::string &wib_addr) :
-    context(1),
-    socket(context, ZMQ_REQ)
+WIBCommon::WIBCommon(const std::string& wib_addr)
+  : context(1)
+  , socket(context, ZMQ_REQ)
 {
   socket.connect(wib_addr); // tcp://192.168.121.*:1234
   TLOG_DEBUG(0) << wib_addr << " Connected!";

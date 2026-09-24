@@ -10,14 +10,14 @@
 
 #include "WIBModule.hpp"
 
+#include "appmodel/ColdADCSettings.hpp"
+#include "appmodel/FEMBSettings.hpp"
 #include "appmodel/NetworkConnectionDescriptor.hpp"
 #include "appmodel/NetworkConnectionRule.hpp"
 #include "appmodel/WIBModule.hpp"
 #include "appmodel/WIBModuleConf.hpp"
-#include "appmodel/WIBSettings.hpp"
 #include "appmodel/WIBPulserSettings.hpp"
-#include "appmodel/ColdADCSettings.hpp"
-#include "appmodel/FEMBSettings.hpp"
+#include "appmodel/WIBSettings.hpp"
 
 #include "wibmod/Issues.hpp"
 
@@ -28,7 +28,7 @@
 /**
  * @brief Name used by TRACE TLOG calls from this source file
  */
-#define TRACE_NAME "WIBModule"             // NOLINT
+#define TRACE_NAME "WIBModule" // NOLINT
 
 namespace dunedaq {
 namespace wibmod {
@@ -37,7 +37,7 @@ WIBModule::WIBModule(const std::string& name)
   : dunedaq::appfwk::DAQModule(name)
 {
   register_command("conf", &WIBModule::do_conf);
-  //register_command("settings", &WIBModule::do_settings);
+  // register_command("settings", &WIBModule::do_settings);
   register_command("start", &WIBModule::do_start);
   register_command("stop", &WIBModule::do_stop);
   register_command("scrap", &WIBModule::do_scrap);
@@ -53,10 +53,10 @@ WIBModule::init(std::shared_ptr<appfwk::ConfigurationManager> mcfg)
   m_wib_settings = m_wib_conf->get_conf();
 }
 
-const appmodel::FEMBSettings* 
+const appmodel::FEMBSettings*
 WIBModule::femb_conf_i(size_t i)
 {
-  switch(i) {
+  switch (i) {
     case 0:
       return m_wib_settings->get_femb0();
     case 1:
@@ -73,7 +73,7 @@ WIBModule::femb_conf_i(size_t i)
 bool
 WIBModule::femb_enabled_i(size_t i)
 {
-  switch(i) {
+  switch (i) {
     case 0:
       return m_wib_conf->get_enabled_femb0();
     case 1:
@@ -88,7 +88,7 @@ WIBModule::femb_enabled_i(size_t i)
 }
 
 void
-WIBModule::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appmodel::FEMBSettings* conf)
+WIBModule::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB* femb_conf, const appmodel::FEMBSettings* conf)
 {
   femb_conf->set_enabled(conf->get_enabled());
 
@@ -107,10 +107,10 @@ WIBModule::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const
   femb_conf->set_strobe_skip(conf->get_strobe_skip());
   femb_conf->set_strobe_delay(conf->get_strobe_delay());
   femb_conf->set_strobe_length(conf->get_strobe_length());
-  
+
   for (int i = 0; i < conf->get_line_driver().size(); i++) {
-    if (i >= 2) {      
-      TLOG() <<  "Warning: tried to pass more than 2 line driver values to FEMB configuration";
+    if (i >= 2) {
+      TLOG() << "Warning: tried to pass more than 2 line driver values to FEMB configuration";
       break;
     }
     femb_conf->add_line_driver(conf->get_line_driver().at(i));
@@ -118,14 +118,14 @@ WIBModule::populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const
 
   for (int i = 0; i < conf->get_pulse_channels().size(); i++) {
     if (i > 15) {
-      TLOG() <<  "Warning: tried to pass more than 16 pulse_channel values to FEMB configuration";
+      TLOG() << "Warning: tried to pass more than 16 pulse_channel values to FEMB configuration";
       break;
     }
     femb_conf->add_pulse_channels(conf->get_pulse_channels().at(i));
   }
 }
 
-void 
+void
 WIBModule::do_conf(const CommandData_t& /*conf_as_json*/)
 {
   TLOG() << "WIBModule " << get_name() << " is " << m_wib_conf->get_wib_addr();
@@ -133,7 +133,7 @@ WIBModule::do_conf(const CommandData_t& /*conf_as_json*/)
   wib = std::unique_ptr<WIBCommon>(new WIBCommon(m_wib_conf->get_wib_addr()));
 
   TLOG() << get_name() << " successfully initialized";
-  
+
   check_timing();
 
   do_settings();
@@ -148,39 +148,34 @@ WIBModule::check_timing()
   TLOG_DEBUG(0) << get_name() << " Checking timing status";
   wib::GetTimingStatus req;
   wib::GetTimingStatus::TimingStatus rep;
-  wib->send_command(req,rep);
-  
+  wib->send_command(req, rep);
+
   int endpoint_status = rep.ept_status() & 0xf;
-  if (endpoint_status == 0x8)
-  {
+  if (endpoint_status == 0x8) {
     TLOG_DEBUG(0) << get_name() << " timing status correct as " << endpoint_status;
     return;
-  } 
-  
-  TLOG_DEBUG(0) << get_name() << " timing status incorrect as " << endpoint_status; 
+  }
+
+  TLOG_DEBUG(0) << get_name() << " timing status incorrect as " << endpoint_status;
 
   wib::ResetTiming req2;
   wib::GetTimingStatus::TimingStatus rep2;
-  wib->send_command(req2,rep2);
+  wib->send_command(req2, rep2);
 
   endpoint_status = rep2.ept_status() & 0xf;
-  if (endpoint_status == 0x8)
-  {
+  if (endpoint_status == 0x8) {
     TLOG_DEBUG(0) << get_name() << " timing status correct as " << endpoint_status;
     return;
-  } 
-  else
-  {
-    TLOG_DEBUG(0) << get_name() << " timing status incorrect as " << endpoint_status; 
+  } else {
+    TLOG_DEBUG(0) << get_name() << " timing status incorrect as " << endpoint_status;
     throw ConfigurationFailed(ERS_HERE, get_name(), std::to_string(endpoint_status));
   }
-
 }
 void
 WIBModule::do_settings()
 {
   TLOG() << "Building WIB config for " << get_name();
- 
+
   wib::ConfigureWIB req;
   req.set_cold(m_wib_settings->get_cold());
   req.set_pulser(m_wib_settings->get_pulser());
@@ -198,7 +193,7 @@ WIBModule::do_settings()
   coldadc_conf->set_reg_29(coldadc_settings->get_reg_29());
   coldadc_conf->set_reg_30(coldadc_settings->get_reg_30());
   req.set_allocated_adc_conf(coldadc_conf);
-  
+
   wib::ConfigureWIB::ConfigureWIBPulser* wib_pulser_conf = new wib::ConfigureWIB::ConfigureWIBPulser();
   auto wib_pulser = m_wib_settings->get_wib_pulser();
   wib_pulser_conf->add_femb_en(wib_pulser->get_enabled_0());
@@ -211,25 +206,20 @@ WIBModule::do_settings()
   wib_pulser_conf->set_pulse_duration(wib_pulser->get_pulse_duration());
   req.set_allocated_wib_pulser(wib_pulser_conf);
 
-  for(size_t iFEMB = 0; iFEMB < 4; iFEMB++)
-  {
+  for (size_t iFEMB = 0; iFEMB < 4; iFEMB++) {
     TLOG() << "Building FEMB " << iFEMB << " config for " << get_name();
-    wib::ConfigureWIB::ConfigureFEMB *femb_conf = req.add_fembs();
+    wib::ConfigureWIB::ConfigureFEMB* femb_conf = req.add_fembs();
     populate_femb_conf(femb_conf, femb_conf_i(iFEMB));
     femb_conf->set_enabled(femb_conf->enabled() and this->femb_enabled_i(iFEMB));
   }
 
-
   TLOG() << "Sending WIB configuration to " << get_name();
   wib::Status rep;
-  wib->send_command(req,rep);
-  
-  if (rep.success())
-  {
+  wib->send_command(req, rep);
+
+  if (rep.success()) {
     TLOG() << get_name() << " successfully configured";
-  }
-  else
-  {
+  } else {
     TLOG() << get_name() << " failed to configure";
     throw ConfigurationFailed(ERS_HERE, get_name(), rep.extra());
   }
@@ -253,7 +243,6 @@ WIBModule::do_scrap(const CommandData_t&)
   wib = NULL;
   TLOG_DEBUG(0) << get_name() << " successfully scrapped";
 }
-
 
 } // namespace wibmod
 } // namespace dunedaq

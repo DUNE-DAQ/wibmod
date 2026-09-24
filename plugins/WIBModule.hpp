@@ -15,7 +15,7 @@
 #define WIBMOD_PLUGINS_WIBCONFIGURATOR_HPP_
 
 #include "wibmod/WIBCommon.hpp"
-//#include "wibmod/wibconfigurator/Nljs.hpp"
+// #include "wibmod/wibconfigurator/Nljs.hpp"
 #include "wib.pb.h"
 
 #include "appmodel/WIBModule.hpp"
@@ -24,8 +24,8 @@
 #include <appfwk/DAQModule.hpp>
 #include <utilities/WorkerThread.hpp>
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace dunedaq {
 namespace wibmod {
@@ -64,16 +64,15 @@ private:
   void do_start(const CommandData_t&);
   void do_stop(const CommandData_t&);
   void do_scrap(const CommandData_t&);
-  
+
   // Helpers
-  void populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB *femb_conf, const appmodel::FEMBSettings* conf);
+  void populate_femb_conf(wib::ConfigureWIB::ConfigureFEMB* femb_conf, const appmodel::FEMBSettings* conf);
   const appmodel::FEMBSettings* femb_conf_i(size_t i);
   bool femb_enabled_i(size_t i);
-
 };
 
 } // namespace wibmod
-                       
+
 } // namespace dunedaq
 
 #endif // WIBMOD_PLUGINS_WIBCONFIGURATOR_HPP_
